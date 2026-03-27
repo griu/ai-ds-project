@@ -125,11 +125,11 @@ La demo empieza siempre en el repo de control.
 Se parte de una carpeta de trabajo con esta estructura mínima:
 
 ```text
-/demo-root/
+/git/ai-ds-project/
 ├─ templates/
 │  ├─ ds-control-plane/
 │  └─ ds-project-workbench/
-└─ demo_hackathon_casepacks/
+└─ demo/
    └─ cases/
       ├─ home-credit/
       └─ pkdd99/
@@ -138,7 +138,7 @@ Se parte de una carpeta de trabajo con esta estructura mínima:
 Donde:
 - `templates/ds-control-plane/` es la plantilla base del repo de control.
 - `templates/ds-project-workbench/` es la plantilla base del repo de ejecución.
-- `demo_hackathon_casepacks/cases/<caso>/` contiene la semilla documental de cada ejercicio.
+- `demo/cases/<caso>/` contiene la semilla documental de cada ejercicio.
 
 ## 3 bis.2. Script Bash para crear una instancia local de caso
 
@@ -150,7 +150,7 @@ set -euo pipefail
 
 if [[ $# -lt 5 ]]; then
   echo "Uso: $0 <ROOT_DIR> <CASE_SLUG> <CONTROL_TEMPLATE> <WORKBENCH_TEMPLATE> <CASEPACK_DIR>"
-  echo "Ejemplo: $0 ~/demo-root home-credit ~/demo-root/templates/ds-control-plane ~/demo-root/templates/ds-project-workbench ~/demo-root/demo_hackathon_casepacks/cases/home-credit"
+  echo "Ejemplo: $0 ~/git/ai-ds-project home-credit ~/git/ai-ds-project/templates/ds-control-plane ~/git/ai-ds-project/templates/ds-project-workbench ~/git/ai-ds-project/demo/cases/home-credit"
   exit 1
 fi
 
@@ -211,22 +211,22 @@ echo "Workbench: $WORKBENCH_REPO"
 
 ```bash
 bash scripts/create_case_instance.sh \
-  ~/demo-root \
+  ~/git/ai-ds-project \
   home-credit \
-  ~/demo-root/templates/ds-control-plane \
-  ~/demo-root/templates/ds-project-workbench \
-  ~/demo-root/demo_hackathon_casepacks/cases/home-credit
+  ~/git/ai-ds-project/templates/ds-control-plane \
+  ~/git/ai-ds-project/templates/ds-project-workbench \
+  ~/git/ai-ds-project/demo/cases/home-credit
 ```
 
 ## 3 bis.4. Ejemplo de uso para PKDD’99
 
 ```bash
 bash scripts/create_case_instance.sh \
-  ~/demo-root \
+  ~/git/ai-ds-project \
   pkdd99 \
-  ~/demo-root/templates/ds-control-plane \
-  ~/demo-root/templates/ds-project-workbench \
-  ~/demo-root/demo_hackathon_casepacks/cases/pkdd99
+  ~/git/ai-ds-project/templates/ds-control-plane \
+  ~/git/ai-ds-project/templates/ds-project-workbench \
+  ~/git/ai-ds-project/demo/cases/pkdd99
 ```
 
 ## 3 bis.5. Qué hace exactamente este script
@@ -260,7 +260,7 @@ set -euo pipefail
 
 if [[ $# -lt 5 ]]; then
   echo "Uso: $0 <ROOT_DIR> <CASE_SLUG> <CONTROL_REMOTE_URL> <WORKBENCH_REMOTE_URL> <BRANCH>"
-  echo "Ejemplo: $0 ~/demo-root home-credit git@github.com:tu-org/home-credit-control.git git@github.com:tu-org/home-credit-workbench.git main"
+  echo "Ejemplo: $0 ~/git/ai-ds-project home-credit git@github.com:tu-org/home-credit-control.git git@github.com:tu-org/home-credit-workbench.git main"
   exit 1
 fi
 
@@ -288,7 +288,7 @@ echo ">>> Repositorios publicados correctamente"
 
 ```bash
 bash scripts/push_case_repos_existing_remote.sh \
-  ~/demo-root \
+  ~/git/ai-ds-project \
   home-credit \
   git@github.com:tu-org/home-credit-control.git \
   git@github.com:tu-org/home-credit-workbench.git \
@@ -309,7 +309,7 @@ set -euo pipefail
 
 if [[ $# -lt 4 ]]; then
   echo "Uso: $0 <ROOT_DIR> <CASE_SLUG> <GITHUB_OWNER> <VISIBILITY>"
-  echo "Ejemplo: $0 ~/demo-root home-credit mi-org private"
+  echo "Ejemplo: $0 ~/git/ai-ds-project home-credit mi-org private"
   exit 1
 fi
 
@@ -338,7 +338,7 @@ echo ">>> Repositorios creados y publicados en GitHub"
 
 ```bash
 bash scripts/create_and_push_case_repos_with_gh.sh \
-  ~/demo-root \
+  ~/git/ai-ds-project \
   pkdd99 \
   mi-org \
   private
