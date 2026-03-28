@@ -3,10 +3,24 @@ description: Definir la siguiente tarea a ejecutar
 agent: control-orchestrator
 ---
 
-A partir de `review_notes.md` y de `../workbench/task_result.md` si existe, redacta la siguiente versión de `next_task.md`.
+A partir de `review_notes.md`, `next_task.md` y `../workbench/task_result.md`, redacta una nueva versión de `next_task.md` únicamente si corresponde continuar.
 
 Requisitos:
 - una sola tarea
-- con objetivo, inputs, outputs y criterios de cierre
-- formulada para que el área `workbench/` la pueda abordar sin ambigüedad
-- si la conectividad de datos sigue sin estar resuelta y condiciona el trabajo posterior, priorízala explícitamente
+- pequeña, verificable y gobernada
+- alineada con el estado real del proyecto
+- sin asumir por adelantado la siguiente fase
+
+La nueva tarea debe incluir:
+- objetivo
+- contexto
+- inputs a revisar
+- trabajo a realizar
+- outputs esperados
+- criterios de finalización
+- límites
+
+Reglas:
+- no fuerces el salto a conectividad, entorno, EDA o modelización
+- si la tarea previa no está cerrada, redefine o completa esa misma fase
+- si existe un bloqueo crítico no resoluble, indícalo explícitamente
