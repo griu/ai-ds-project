@@ -1,10 +1,10 @@
-# ds-control-plane
+# control
 
-Repo de gobierno del proyecto.
+Área de gobierno del proyecto instanciado.
 
 ## Qué hace
 - define la siguiente tarea
-- revisa el resultado entregado por el repo de ejecución
+- revisa el resultado entregado por `../workbench/task_result.md`
 - decide si se avanza, se corrige o se repite
 
 ## Artefactos principales
@@ -27,10 +27,10 @@ Escenarios previstos:
 
 ## Modo recomendado de uso
 1. Lee el estado disponible.
-2. Revisa `task_result.md` si existe.
+2. Revisa `../workbench/task_result.md` si existe.
 3. Usa el prompt de revisión o de siguiente paso.
 4. Actualiza `next_task.md`.
 
 ## Preferencias de entorno
-- Si este repo llega a necesitar dependencias Python, el formato preferido es `pyproject.toml`.
-- El entorno virtual debe ser local al repo: `.venv/`.
+- Si este directorio llega a necesitar dependencias Python, el formato preferido es `pyproject.toml`.
+- El entorno virtual debe ser local al directorio: `.venv/`.

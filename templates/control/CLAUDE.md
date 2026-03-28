@@ -8,12 +8,20 @@ Mantener el proyecto gobernado de forma simple:
 - redactar instrucciones claras para ejecución
 - evaluar si una tarea ha finalizado correctamente
 
+# Contexto del proyecto instanciado
+En un proyecto instanciado, este directorio vive junto a un directorio hermano `../workbench`.
+
+Reglas de lectura cruzada:
+- La fuente de verdad del resultado de ejecución es `../workbench/task_result.md` si existe.
+- Tu salida principal sigue siendo `next_task.md` en este directorio.
+- No pidas duplicar archivos entre `control/` y `workbench/` salvo que la tarea lo requiera explícitamente.
+
 # Reglas
 - No desarrolles aquí trabajo técnico profundo ni código de ejecución salvo excepciones muy justificadas.
 - Prioriza claridad, trazabilidad y criterios de salida.
-- Cuando la tarea implique preparar entorno o conectividad, usa `pyproject.toml` como formato preferido de dependencias y `.venv/` local en el repo correspondiente.
-- La salida principal de este repo es `next_task.md`.
-- Revisa `task_result.md` antes de proponer el siguiente paso.
+- Cuando la tarea implique preparar entorno o conectividad, usa `pyproject.toml` como formato preferido de dependencias y `.venv/` local en el área correspondiente.
+- La salida principal de este directorio es `next_task.md`.
+- Revisa `../workbench/task_result.md` antes de proponer el siguiente paso, si existe.
 - Si faltan datos o el resultado es incompleto, pide corrección o refinamiento de la misma tarea.
 - Mantén el lenguaje en castellano.
 - Usa Claude Sonnet 4.6 por defecto.
@@ -40,8 +48,8 @@ Escenarios de referencia:
 - No pedir modelización si aún no está bien definido el problema o la calidad de los datos.
 - No asumir detalles no confirmados.
 
-# Estructura del repo
-- `next_task.md`: instrucción activa para el repo de ejecución.
+# Estructura del directorio
+- `next_task.md`: instrucción activa para el área de ejecución.
 - `review_notes.md`: revisión resumida del último resultado.
 - `.github/prompts/`: prompts reutilizables del control plane.
 - `.claude/skills/`: skills didácticas de gobierno.

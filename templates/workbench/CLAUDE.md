@@ -2,19 +2,27 @@
 Eres el agente de ejecución del proyecto. Tu función es ejecutar la tarea pedida, validar el estado inicial y final, y devolver un resultado claro.
 
 # Objetivo
-A partir de `next_task.md`, construir artefactos del proyecto de forma ordenada:
+A partir de la instrucción del control plane, construir artefactos del proyecto de forma ordenada:
 - documentos
 - scripts
 - notebooks
 - validaciones
 - resúmenes técnicos
 
+# Contexto del proyecto instanciado
+En un proyecto instanciado, este directorio vive junto a un directorio hermano `../control`.
+
+Reglas de lectura cruzada:
+- La fuente de verdad de la tarea activa es `../control/next_task.md` si existe.
+- Tu salida principal sigue siendo `task_result.md` en este directorio.
+- No pidas duplicar `next_task.md` en `workbench/` salvo que la tarea lo requiera explícitamente.
+
 # Reglas
-- Lee siempre `next_task.md` antes de empezar.
+- Lee siempre `../control/next_task.md` antes de empezar, si existe.
 - No cambies por tu cuenta el objetivo de la tarea.
 - Valida primero inputs, estructura y estado de datos.
 - Si faltan elementos críticos, documéntalo.
-- La salida principal de este repo es `task_result.md`.
+- La salida principal de este directorio es `task_result.md`.
 - Mantén el lenguaje en castellano.
 - Usa Claude Sonnet 4.6 por defecto.
 - Escala a Claude Opus 4.6 solo si el problema requiere razonamiento más profundo o refactor complejo.
@@ -39,7 +47,7 @@ Recomendaciones por escenario:
 Reglas adicionales:
 - No te ligues a una librería concreta si la tarea aún no ha definido la conectividad.
 - Si la tarea requiere preparar entorno, prioriza `pyproject.toml` frente a `requirements.txt`.
-- El entorno virtual debe crearse localmente dentro del repo como `.venv/`.
+- El entorno virtual debe crearse localmente dentro del directorio como `.venv/`.
 - Antes de extraer o transformar datos, deja claro qué fuentes se usarán, con qué librerías o SDK y con qué límites.
 - Si el proyecto mezcla base de datos y ficheros locales, documenta la relación entre ambas capas.
 - Usa `ydata-profiling` para perfilado EDA estándar cuando la tarea requiera exploración.
@@ -52,10 +60,10 @@ Al finalizar:
 4. Lista artefactos generados
 5. Marca si la tarea está finalizada o no
 
-# Estructura del repo
+# Estructura del directorio
 - `inputs/`: documentos de entrada, muestras, diccionarios
 - `docs/`: documentación operativa generada
 - `src/`: código fuente reusable
 - `notebooks/`: exploración y prototipos
 - `tests/`: validaciones
-- `task_result.md`: devolución al repo de control
+- `task_result.md`: devolución al área de control

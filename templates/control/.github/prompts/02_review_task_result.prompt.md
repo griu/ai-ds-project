@@ -3,7 +3,7 @@ description: Revisar el resultado de una tarea ya ejecutada
 agent: control-orchestrator
 ---
 
-Revisa `task_result.md`.
+Revisa `../workbench/task_result.md` si existe. Si no existe, explica qué falta para poder revisar la tarea.
 
 Debes:
 1. resumir qué se ha conseguido

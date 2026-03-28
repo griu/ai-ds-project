@@ -1,28 +1,43 @@
-# Bundle de demo: control plane + project workbench
+# ai-ds-project
 
-Este paquete contiene una demo didáctica con dos repositorios:
-- `ds-control-plane`: define, revisa y decide el siguiente paso
-- `ds-project-workbench`: ejecuta la tarea, valida y reporta
+Repositorio maestro del framework de demo para proyectos de Data Science gobernados con VS Code + Claude.
 
-## Cambios incluidos en esta versión
-- EDA estandarizada con `ydata-profiling`
-- Conectividad adaptable como tarea inicial
-- `pyproject.toml` como estándar preferido para dependencias
-- `.venv/` local dentro de cada repositorio
-- Recomendaciones concretas de librerías por escenario:
-  - PostgreSQL: `psycopg` y opcionalmente `SQLAlchemy`
-  - Oracle: `python-oracledb` y opcionalmente `SQLAlchemy`
-  - BigQuery + GCS: `google-cloud-bigquery`, `google-cloud-storage` y opcionalmente `pandas-gbq`
-  - Ficheros locales: `pathlib`, `pandas`, `pyarrow`
+## Qué contiene
+- `templates/control/`: plantilla del área de gobierno del proyecto.
+- `templates/workbench/`: plantilla del área de ejecución del proyecto.
+- `demo/cases/<slug>/control/`: overlays del caso para `control/`.
+- `demo/cases/<slug>/workbench/`: overlays del caso para `workbench/`.
+- `demo/scripts/`: scripts para instanciar un proyecto nuevo y publicarlo.
 
-## Uso recomendado
-1. Abre `ds-control-plane` en una ventana de VS Code.
-2. Abre `ds-project-workbench` en otra ventana de VS Code.
-3. Desde control, redacta `next_task.md`.
-4. Desde ejecución, trabaja sobre la tarea y devuelve `task_result.md`.
-5. Repite el ciclo.
+## Modelo operativo
+Este repo **no es** el proyecto activo del caso.
 
-## Preferencias de entorno
-- Cada repositorio debe gestionar su propio entorno virtual local en `.venv/`.
-- Cuando una tarea requiera preparar dependencias, la salida preferida debe ser `pyproject.toml`, no `requirements.txt`, salvo que la tarea indique explícitamente otra cosa.
-- Se incluyen `.gitignore` básicos para ignorar `.venv/` y caches de Python.
+Este repo sirve como:
+- plantilla viva del método;
+- repositorio donde evolucionan prompts, skills, agentes y documentación base;
+- fuente para crear nuevos proyectos instanciados.
+
+## Qué se crea por cada caso
+Cada caso se instancia como **un único repo nuevo fuera de este repo maestro**.
+
+Ejemplo:
+- repo maestro: `/home/griu/git/ai-ds-project`
+- caso instanciado: `/home/griu/git/home-credit`
+
+Dentro del caso instanciado quedan dos áreas de trabajo:
+- `control/`
+- `workbench/`
+
+## Flujo resumido
+1. Instancia el caso con `demo/scripts/create_case_instance.sh`.
+2. Abre `control/` en una ventana de VS Code.
+3. Abre `workbench/` en otra ventana de VS Code.
+4. En `control/`, redacta `next_task.md`.
+5. En `workbench/`, usa como fuente de verdad `../control/next_task.md`.
+6. En `workbench/`, actualiza `task_result.md`.
+7. En `control/`, revisa `../workbench/task_result.md`.
+
+## Notas de entorno
+- `pyproject.toml` es el formato preferido cuando haya que preparar dependencias.
+- Cada área puede crear su `.venv/` local si lo necesita.
+- La conectividad de datos se define como tarea explícita al inicio del proyecto.

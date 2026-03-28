@@ -1,10 +1,10 @@
-# ds-project-workbench
+# workbench
 
-Repo de ejecución del proyecto.
+Área de ejecución del proyecto instanciado.
 
 ## Qué hace
 - parte de una estructura genérica
-- recibe una tarea desde `next_task.md`
+- recibe una tarea desde `../control/next_task.md`
 - crea documentación, código y análisis
 - devuelve un resumen estructurado en `task_result.md`
 
@@ -35,16 +35,12 @@ Recomendaciones de librerías por escenario:
 - Ficheros locales: `pathlib`, `pandas`, `pyarrow` o equivalentes según formato.
 
 ## Modo recomendado de uso
-1. Copia o referencia `next_task.md` desde el repo de control.
+1. Lee `../control/next_task.md`.
 2. Ejecuta primero la tarea de definición/preparación de conectividad si aún no existe.
 3. Usa la skill que corresponda.
 4. Cierra con `task_result.md`.
 
-## Nota sobre skills publicadas
-
-Se incluye `PUBLISHED_SKILLS_NOTES.md` con una guía breve sobre repositorios y mecanismos públicos de distribución de skills.
-
 ## Preferencias de entorno
 - Formato preferido de dependencias: `pyproject.toml`.
-- Entorno virtual local del repo: `.venv/`.
+- Entorno virtual local del directorio: `.venv/`.
 - La preparación de `pyproject.toml` y `.venv/` forma parte de las tareas iniciales cuando el proyecto necesita entorno Python operativo.
