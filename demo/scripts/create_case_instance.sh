@@ -7,18 +7,7 @@ Uso:
   bash demo/scripts/create_case_instance.sh <master_repo> <case_slug> <target_parent_dir>
 
 Ejemplo:
-  bash demo/scripts/create_case_instance.sh \
-    /home/griu/git/ai-ds-project \
-    home-credit \
-    /home/griu/git
-
-Resultado:
-  /home/griu/git/home-credit/
-    ├─ .git
-    ├─ .gitignore
-    ├─ home-credit.code-workspace
-    ├─ control/
-    └─ workbench/
+  bash demo/scripts/create_case_instance.sh     /home/griu/git/ai-ds-project     home-credit     /home/griu/git
 USAGE
 }
 
@@ -61,7 +50,6 @@ GITIGNORE
 write_workspace_file() {
   local target_repo="$1"
   local case_slug="$2"
-
   cat > "$target_repo/$case_slug.code-workspace" <<EOF2
 {
   "folders": [
@@ -76,26 +64,20 @@ EOF2
 write_root_readme() {
   local target_repo="$1"
   local case_slug="$2"
-
   cat > "$target_repo/README.md" <<EOF2
 # ${case_slug}
 
-Proyecto instanciado a partir de \`ai-ds-project\`.
+Proyecto instanciado desde \`ai-ds-project\`.
 
 ## Estructura
-- \`control/\`: define y revisa la siguiente tarea.
-- \`workbench/\`: ejecuta la tarea y devuelve resultado.
+- \`control/\`: define la siguiente tarea y revisa resultados.
+- \`workbench/\`: ejecuta la tarea y devuelve \`task_result.md\`.
 
-## Flujo operativo
-1. Abre \`control/\` en una ventana de VS Code.
-2. Abre \`workbench/\` en otra ventana de VS Code.
-3. En \`control/\`, redacta o actualiza \`next_task.md\`.
-4. En \`workbench/\`, usa como fuente de verdad \`../control/next_task.md\`.
-5. En \`workbench/\`, actualiza \`task_result.md\`.
-6. En \`control/\`, revisa \`../workbench/task_result.md\` y define el siguiente paso.
-
-## Workspace recomendado
-- \`${case_slug}.code-workspace\`
+## Handoff operativo
+- \`control/next_task.md\` es la fuente de verdad de la tarea activa.
+- \`workbench/task_result.md\` es la fuente de verdad del resultado de ejecución.
+- \`workbench/\` debe leer \`../control/next_task.md\`.
+- \`control/\` debe leer \`../workbench/task_result.md\`.
 EOF2
 }
 
@@ -104,7 +86,6 @@ main() {
     usage
     exit 0
   fi
-
   if [[ $# -ne 3 ]]; then
     usage
     exit 1
@@ -116,7 +97,6 @@ main() {
 
   local CONTROL_TEMPLATE="$MASTER_REPO/templates/control"
   local WORKBENCH_TEMPLATE="$MASTER_REPO/templates/workbench"
-
   local CASE_OVERLAY_BASE="$MASTER_REPO/demo/cases/$CASE_SLUG"
   local CONTROL_OVERLAY="$CASE_OVERLAY_BASE/control"
   local WORKBENCH_OVERLAY="$CASE_OVERLAY_BASE/workbench"
@@ -128,11 +108,7 @@ main() {
   [[ -d "$MASTER_REPO" ]] || { echo "ERROR: no existe master_repo: $MASTER_REPO" >&2; exit 1; }
   [[ -d "$CONTROL_TEMPLATE" ]] || { echo "ERROR: no existe templates/control: $CONTROL_TEMPLATE" >&2; exit 1; }
   [[ -d "$WORKBENCH_TEMPLATE" ]] || { echo "ERROR: no existe templates/workbench: $WORKBENCH_TEMPLATE" >&2; exit 1; }
-
-  if [[ -e "$TARGET_REPO" ]]; then
-    echo "ERROR: el destino ya existe: $TARGET_REPO" >&2
-    exit 1
-  fi
+  [[ ! -e "$TARGET_REPO" ]] || { echo "ERROR: el destino ya existe: $TARGET_REPO" >&2; exit 1; }
 
   echo ">>> Creando repo destino: $TARGET_REPO"
   mkdir -p "$TARGET_CONTROL" "$TARGET_WORKBENCH"
@@ -162,10 +138,8 @@ main() {
 
   echo ">>> Creando .gitignore raíz"
   write_root_gitignore "$TARGET_REPO"
-
   echo ">>> Creando README raíz"
   write_root_readme "$TARGET_REPO" "$CASE_SLUG"
-
   echo ">>> Creando workspace de VS Code"
   write_workspace_file "$TARGET_REPO" "$CASE_SLUG"
 
