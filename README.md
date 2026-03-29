@@ -41,3 +41,26 @@ Dentro del caso instanciado quedan dos áreas de trabajo:
 - `pyproject.toml` es el formato preferido cuando haya que preparar dependencias.
 - Cada área puede crear su `.venv/` local si lo necesita.
 - La conectividad de datos se define como tarea explícita al inicio del proyecto.
+
+## License
+
+ai-ds-project is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ai-ds-project is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with ai-ds-project. See [COPYING.LESSER](./COPYING.LESSER). The
+project also includes [COPYING](./COPYING), the GNU General Public License
+v3 referenced by LGPL-3.0.
+
+## Files header
+
+```python
+# SPDX-License-Identifier: LGPL-3.0-or-later
+```
