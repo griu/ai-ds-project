@@ -110,7 +110,20 @@ Existen **5 prompts operativos**:
 
 ## Procedimiento de creación del caso
 
-### 1. Variables de trabajo
+El script acepta cuatro argumentos:
+
+```
+bash create_case_instance.sh <master_repo> <case_slug> [target_parent_dir] [target_repo_name]
+```
+
+- `<case_slug>`: define el overlay de inputs a aplicar (carpeta `demo/cases/<case_slug>/`).
+- `[target_repo_name]`: nombre de la carpeta destino. Si no se informa, es igual a `<case_slug>`.
+
+Esto permite instanciar el mismo caso con un nombre de carpeta diferente.
+
+### Caso A — Nombre de destino igual al caso (comportamiento por defecto)
+
+#### 1. Variables de trabajo
 
 ```bash
 AI_DS_PROJECT_ROOT="/ruta/a/ai-ds-project"
@@ -119,13 +132,13 @@ CASES_PARENT_DIR="$(dirname "$AI_DS_PROJECT_ROOT")"
 CASE_REPO="$CASES_PARENT_DIR/$CASE_SLUG"
 ```
 
-### 2. Reinicio opcional
+#### 2. Reinicio opcional
 
 ```bash
 rm -rf "$CASE_REPO"
 ```
 
-### 3. Crear la instancia
+#### 3. Crear la instancia
 
 Como hermano de `ai-ds-project`:
 
@@ -139,7 +152,48 @@ O con ruta padre explícita:
 bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh"   "$AI_DS_PROJECT_ROOT"   "$CASE_SLUG"   "$CASES_PARENT_DIR"
 ```
 
-### 4. Abrir los dos workspaces
+#### 4. Abrir los dos workspaces
+
+```bash
+code -n "$CASE_REPO/control.code-workspace"
+code -n "$CASE_REPO/workbench.code-workspace"
+```
+
+---
+
+### Caso B — Nombre de destino diferente al caso
+
+Útil cuando quieres instanciar el mismo caso varias veces con nombres distintos.
+
+#### 1. Variables de trabajo
+
+```bash
+AI_DS_PROJECT_ROOT="/ruta/a/ai-ds-project"
+CASE_SLUG="home-credit"
+TARGET_REPO_NAME="home-credit2"
+CASES_PARENT_DIR="$(dirname "$AI_DS_PROJECT_ROOT")"
+CASE_REPO="$CASES_PARENT_DIR/$TARGET_REPO_NAME"
+```
+
+#### 2. Reinicio opcional
+
+```bash
+rm -rf "$CASE_REPO"
+```
+
+#### 3. Crear la instancia
+
+```bash
+bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh" \
+  "$AI_DS_PROJECT_ROOT" \
+  "$CASE_SLUG" \
+  "$CASES_PARENT_DIR" \
+  "$TARGET_REPO_NAME"
+```
+
+El overlay aplicado será el de `home-credit`, pero la carpeta destino será `home-credit2`.
+
+#### 4. Abrir los dos workspaces
 
 ```bash
 code -n "$CASE_REPO/control.code-workspace"

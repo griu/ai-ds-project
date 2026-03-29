@@ -5,13 +5,15 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Uso:
-  bash demo/scripts/create_case_instance.sh <master_repo> <case_slug> [target_parent_dir]
+  bash demo/scripts/create_case_instance.sh <master_repo> <case_slug> [target_parent_dir] [target_repo_name]
 
 Argumentos:
   <master_repo>        Ruta al repo maestro ai-ds-project
-  <case_slug>          Nombre del caso a instanciar, por ejemplo: home-credit
+  <case_slug>          Nombre del caso a instanciar (define el overlay a aplicar), por ejemplo: home-credit
   [target_parent_dir]  Directorio padre donde crear el caso.
                        Si no se informa, se usa el directorio padre de <master_repo>.
+  [target_repo_name]   Nombre de la carpeta destino del caso instanciado.
+                       Si no se informa, se usa el mismo valor que <case_slug>.
 USAGE
 }
 
@@ -148,7 +150,7 @@ main() {
     exit 0
   fi
 
-  if [[ $# -lt 2 || $# -gt 3 ]]; then
+  if [[ $# -lt 2 || $# -gt 4 ]]; then
     usage
     exit 1
   fi
@@ -156,6 +158,7 @@ main() {
   local MASTER_REPO="$1"
   local CASE_SLUG="$2"
   local TARGET_PARENT_DIR="${3:-$(dirname "$MASTER_REPO")}"
+  local TARGET_REPO_NAME="${4:-$CASE_SLUG}"
 
   local CONTROL_TEMPLATE="$MASTER_REPO/templates/control"
   local WORKBENCH_TEMPLATE="$MASTER_REPO/templates/workbench"
@@ -164,7 +167,7 @@ main() {
   local CONTROL_OVERLAY="$CASE_OVERLAY_BASE/control"
   local WORKBENCH_OVERLAY="$CASE_OVERLAY_BASE/workbench"
 
-  local TARGET_REPO="$TARGET_PARENT_DIR/$CASE_SLUG"
+  local TARGET_REPO="$TARGET_PARENT_DIR/$TARGET_REPO_NAME"
   local TARGET_CONTROL="$TARGET_REPO/control"
   local TARGET_WORKBENCH="$TARGET_REPO/workbench"
 
@@ -220,7 +223,7 @@ main() {
   echo ">>> Inicializando un único repositorio Git en la raíz del caso"
   git -c init.defaultBranch=main init "$TARGET_REPO"
   git -C "$TARGET_REPO" add .
-  git -C "$TARGET_REPO" commit -m "Initialize case $CASE_SLUG from ai-ds-project template"
+  git -C "$TARGET_REPO" commit -m "Initialize case $TARGET_REPO_NAME (overlay: $CASE_SLUG) from ai-ds-project template"
 
   echo
   echo ">>> Caso creado correctamente"
