@@ -1,3 +1,5 @@
-# Temporal modeling assumptions - PKDD99
+# Temporal modeling assumptions — PKDD'99 Financial
 
-Se requiere una definición explícita de snapshot, ventana de observación y horizonte de predicción.
+- la muestra puede ser por objeto + momento
+- evaluar sesgo por observaciones repetidas
+- reservar, si es posible, validación out-of-time

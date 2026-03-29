@@ -1,1 +1,6 @@
 ai-ds-project.code-workspace
+*.code-workspace
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store

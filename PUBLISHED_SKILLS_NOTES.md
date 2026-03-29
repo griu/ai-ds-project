@@ -1,10 +1,9 @@
 # Referencias sobre skills públicas y reutilizables
 
 ## Qué sí existe hoy
-- Repositorio público oficial de Anthropic con skills: `anthropics/skills`
+- Repositorio público oficial de Anthropic con skills
 - Soporte oficial de Agent Skills en VS Code / GitHub Copilot
 - Soporte oficial de skills en Claude Code
-- Plugins de agentes en VS Code (preview), que pueden empaquetar skills, agentes, hooks y MCP servers
 
 ## Qué significa para esta demo
 - Este bundle usa skills locales dentro de cada repo para que la demo sea simple y controlada.
@@ -13,5 +12,5 @@
 
 ## Recomendación práctica
 1. Mantén en la demo skills locales y didácticas.
-2. Revisa skills públicas oficiales como referencia de diseño.
-3. Usa skills comunitarias solo tras validar calidad, mantenimiento y compatibilidad.
+2. Revisa skills públicas oficiales solo como inspiración.
+3. Prioriza mantenibilidad y trazabilidad frente a sofisticación innecesaria.
