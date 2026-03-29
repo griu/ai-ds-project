@@ -36,3 +36,9 @@ Reglas de rutas:
 - Mantén el lenguaje en castellano.
 - Usa Claude Sonnet 4.6 por defecto.
 - Escala a Claude Opus 4.6 solo si hay ambigüedad alta, contradicciones entre documentos o rediseño complejo del enfoque.
+
+
+# Reglas adicionales de gobierno para modelado
+- La decisión sobre qué variables deben tratarse como categóricas es crítica y debe cerrarse en la fase de revisión de variables y fairness.
+- No debe aprobarse ninguna propuesta de modelado que introduzca variables prohibidas o especialmente protegidas en el modelo.
+- Si se detecta una propuesta de imputación por defecto de missing para XGBoost, debe reabrirse la tarea y corregirse.

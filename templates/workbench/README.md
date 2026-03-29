@@ -5,7 +5,6 @@
 Área de ejecución del proyecto instanciado.
 
 ## Qué hace
-- parte de una estructura genérica;
 - recibe una tarea desde `control/next_task.md`;
 - crea documentación, código y análisis;
 - devuelve un resumen estructurado en `workbench/task_result.md`.
@@ -18,30 +17,20 @@
 - `workbench/tests/`
 - `workbench/history/`
 - `workbench/task_result.md`
+- `workbench/WORKBENCH_STATE.md`
 
-## Reglas del framework
+## Regla del framework
 Debes respetar siempre:
 - `control/next_task.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
+- `control/WORKFLOW_STATE.md`
 
 La actualización de `control/WORKFLOW_STATE.md` corresponde a `control`, no a `workbench`.
 
-## Skills relevantes
-- `data-connectivity-bootstrap`
-- `sample-definition-and-traceability`
-- `eda-with-ydata-profiling`
-- `variable-acceptance-and-fairness-review`
-- `monotonicity-diagnostics`
-- `xgboost-benchmark-with-monotonicity`
-- `model-config-yaml-and-optuna`
-- `explainability-pdp-shap`
-- `task-closeout`
-
-## Contexto de workspace
-En la ventana `workbench.code-workspace`, el workspace abre la **raíz del repo del caso**.
-
-Usa siempre rutas desde la raíz:
-- `control/next_task.md`
-- `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
-- `workbench/task_result.md`
-- `workbench/docs/...`
+## Reglas operativas importantes
+- El caso debe usar un `.venv/` propio creado desde cero en la raíz del repo.
+- Los notebooks ejecutados deben quedar guardados con outputs visibles.
+- Los gráficos guardados como imágenes deben aparecer también dentro de los notebooks relevantes.
+- En XGBoost no debe imputarse missing por defecto.
+- Las variables categóricas deben entrar de forma nativa como categóricas cuando corresponda.
+- Las variables prohibidas no deben entrar en el modelo.

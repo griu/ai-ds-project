@@ -3,20 +3,15 @@ name: variable-acceptance-and-fairness-review
 description: Revisa variables por causalidad, negocio, fairness, proxies, missing y coherencia de signo o monotonicidad
 ---
 
-## Objetivo
-Emitir alertas y recomendaciones sobre aceptación o rechazo de variables candidatas antes del modelado definitivo.
-
-## Debes revisar
+Emite alertas y recomendaciones sobre:
 - interpretabilidad de negocio;
 - sentido causal o explicativo mínimo;
-- variables con alta relación estadística pero baja interpretabilidad;
 - fairness, sesgo y regulación;
 - proxies de atributos protegidos;
 - coherencia de signo o monotonicidad;
-- comportamiento de Missing;
-- aceptabilidad de patrones no monótonos.
+- comportamiento de Missing.
 
-## Reglas
-- no bloquees automáticamente todos los casos, pero sí eleva revisión obligatoria cuando corresponda;
-- prioriza variables más causales o transformaciones más explicativas;
-- documenta alertas, riesgos y recomendación de uso o exclusión.
+Reglas adicionales:
+- las variables especialmente protegidas o prohibidas, como género, religión o estado de salud, no deben entrar en ningún caso al modelo;
+- identifica explícitamente variables numéricas de naturaleza categórica;
+- deja resuelta en esta fase la decisión de qué variables deben tratarse como categóricas en modelado.

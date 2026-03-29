@@ -3,28 +3,26 @@ name: xgboost-benchmark-with-monotonicity
 description: Entrena y compara XGBoost con y sin monotonicidades, respetando métricas, early stopping y validación
 ---
 
-## Reglas
-- Si se han definido monotonicidades candidatas:
-  - entrena un modelo sin monotonicidades
-  - y otro con monotonicidades
-- Compara siempre en:
-  - train
-  - validation
-  - test
-- Usa GPU si existe y aporta valor.
+Si se han definido monotonicidades candidatas:
+- entrena un modelo sin monotonicidades;
+- y otro con monotonicidades.
 
-## Target binario
-- Usa logloss.
-- Genera gráficos de logloss por iteración en train y validation.
-- Usa early stopping con paciencia mínima de 20.
-- Usa además un umbral mínimo razonable de mejora.
-- Explica:
-  - criterio de parada
-  - iteración final
-  - sugerencias de mejora
+Compara siempre en:
+- train
+- validation
+- test
 
-## Salidas esperadas
-- benchmark comparativo
-- métricas
-- curvas de entrenamiento
-- recomendación preliminar no definitiva
+Si el target es binario:
+- usa logloss;
+- genera curvas de logloss por iteración;
+- usa early stopping con paciencia mínima de 20;
+- explica criterio de parada e iteración final.
+
+Reglas adicionales de implementación:
+- no hagas imputación de missing por defecto para XGBoost;
+- usa `enable_categorical=True` cuando existan variables que deban entrar como categóricas;
+- aplica esto a variables textuales, categóricas explícitas y numéricas de naturaleza categórica;
+- no uses target encoding suavizado;
+- aprovecha parámetros nativos de categóricas como `max_cat_to_onehot`;
+- en predicción, trata categorías no vistas en train como missing o no informadas;
+- excluye del modelo cualquier variable prohibida o especialmente protegida.

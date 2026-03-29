@@ -13,5 +13,6 @@ Actualiza `workbench/task_result.md` con:
 
 Además:
 - actualiza `workbench/WORKBENCH_STATE.md` reflejando el avance local;
-- deja claro qué estados heredados han sido ejecutados o quedan en revisión;
+- si hubo notebooks ejecutados, confirma que quedaron guardados con outputs visibles;
+- si hubo gráficos de EDA guardados como imágenes, confirma que también aparecen en los notebooks relevantes;
 - guarda una copia histórica numerada en `workbench/history/`.
