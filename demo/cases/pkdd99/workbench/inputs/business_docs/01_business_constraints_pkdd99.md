@@ -1,5 +1,5 @@
-# Business constraints - PKDD99
+# Business constraints — PKDD'99 Financial
 
-- Trazabilidad temporal estricta
-- Documentar claramente la unidad de observación
-- Evitar leakage por joins mal definidos
+- Priorizar claridad en unidad de análisis.
+- Separar bien ventana de observación y ventana de target.
+- Documentar sesgos por repeticiones y longitudinalidad.

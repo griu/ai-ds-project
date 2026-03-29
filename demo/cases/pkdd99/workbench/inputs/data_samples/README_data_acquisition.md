@@ -1,3 +1,3 @@
-# Data acquisition - PKDD99
+# Data acquisition
 
-Descarga el dataset público o la muestra de trabajo y coloca aquí los ficheros necesarios para la demo.
+Documentar origen de los ficheros, relaciones entre tablas y validación mínima de lectura.

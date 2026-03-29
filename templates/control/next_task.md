@@ -1,16 +1,3 @@
-# Tarea
-[Pendiente de definir]
+# Next task
 
-## Objetivo
-
-## Contexto
-
-## Inputs a revisar
-
-## Trabajo a realizar
-
-## Outputs esperados
-
-## Criterios de finalización
-
-## Límites
+Pendiente de definir por `control`.

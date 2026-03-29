@@ -21,6 +21,5 @@
 Estas recomendaciones deben tratarse como preferentes, no obligatorias, y siempre deben confirmarse en la tarea inicial de conectividad del proyecto.
 
 ## Preferencia de empaquetado del proyecto
-- Cuando se prepare el entorno Python del proyecto, el formato preferido es `pyproject.toml`.
-- El entorno virtual debe crearse localmente dentro de cada repositorio como `.venv/`.
-- `requirements.txt` queda como opción secundaria solo si la tarea lo justifica.
+- Formato preferido: `pyproject.toml`
+- Entorno virtual local del proyecto: `.venv/` en la raíz del repo del caso

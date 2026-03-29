@@ -1,6 +1,7 @@
-# Jury and demo goals - PKDD99
+# PKDD'99 Financial — Jury and demo goals
 
-## Qué se quiere demostrar
-- framing temporal correcto
-- decisiones explícitas sobre ventana de observación y horizonte
-- diseño de features relacionales y temporales
+## Qué debe ver el jurado
+- definición de muestras temporales;
+- unidad de análisis bien razonada;
+- tratamiento de observaciones repetidas;
+- validación temporal y posible out-of-time.

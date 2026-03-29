@@ -1,7 +1,3 @@
-# Table dictionary - PKDD99
+# Table dictionary — PKDD'99 Financial
 
-## account / disp / client
-Relaciones base de cliente y cuenta.
-
-## trans / loan / order / card
-Historial financiero y contractual.
+Debe complementarse a partir de la documentación oficial del caso y de la explicación funcional que acompañe la demo.

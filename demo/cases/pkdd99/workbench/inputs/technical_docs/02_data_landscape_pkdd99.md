@@ -1,3 +1,9 @@
-# Data landscape - PKDD99
+# Data landscape — PKDD'99 Financial
 
-Tablas relacionales con clientes, cuentas, préstamos, órdenes, transacciones y tarjetas.
+Caso con fuerte componente temporal y relacional.
+Debe documentarse:
+- objeto observado;
+- frecuencia temporal;
+- tablas principales;
+- joins;
+- observabilidad del target.
