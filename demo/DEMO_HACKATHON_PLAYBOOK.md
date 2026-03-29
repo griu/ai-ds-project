@@ -23,8 +23,10 @@ Este framework incorpora requisitos explícitos para:
 - `templates/control/DEMO_WORKFLOW_STANDARD.md`
 - `templates/control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `templates/control/WORKFLOW_STATE.md`
-- `templates/workbench/WORKBENCH_STATE.md`
-- `docs/PROJECT_CONTINUITY_MEMORY.md`
+
+El primero define la dinámica operativa.  
+El segundo define los requisitos técnicos obligatorios.  
+El tercero mantiene visible el estado del plan de trabajo.
 
 ## Workspaces
 Cada caso instanciado crea:
@@ -36,11 +38,10 @@ Ambos abren la misma raíz del caso.
 ## Regla de simplificación
 La lógica estable debe vivir sobre todo en:
 - `control/CLAUDE.md`
-- `workbench/CLAUDE.md`
 - `control/DEMO_WORKFLOW_STANDARD.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/WORKFLOW_STATE.md`
-- `workbench/WORKBENCH_STATE.md`
+- `workbench/CLAUDE.md`
 
 Los prompts recurrentes deben ser lo más ligeros posible.
 
@@ -52,7 +53,7 @@ Los prompts recurrentes deben ser lo más ligeros posible.
 5. Repetir.
 
 ## Reapertura del flujo
-El framework soporta reabrir un estado concreto:
+El framework soporta reabrir un estado concreto del plan de trabajo:
 - marcando ese estado como `En revisión`;
 - marcando estados posteriores afectados también como `En revisión`, si corresponde;
 - generando una nueva `control/next_task.md` correctiva;

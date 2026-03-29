@@ -11,11 +11,19 @@
 ## Regla de uso
 Este documento debe mantenerse actualizado desde `control/`.
 
+Debe actualizarse:
+- al finalizar cada revisión;
+- antes de avanzar al siguiente ciclo de `workbench`;
+- si se reabre un estado ya cerrado;
+- y cuando cambie el orden lógico del plan.
+
 Cuando un estado quede **Finalizado**, debe incluir:
 - fecha de cierre en formato `DD-MM-YYYY`;
 - y un resumen compacto del cierre:
   - una o dos líneas, o
   - entre 3 y 4 bullets breves.
+
+---
 
 ## 01. Framing del caso
 - Estado: Pendiente

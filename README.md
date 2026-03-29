@@ -186,5 +186,14 @@ Antes de ejecutar este prompt, conviene revisar también:
 
 para asegurar que el nuevo caso quede alineado no solo con la estructura técnica actual, sino también con la visión, los criterios y el sentido general del proyecto.
 
+---
+
 ## Licencia
 ai-ds-project se distribuye bajo **LGPL-3.0-or-later**.
+
+Al redistribuir o reutilizar los ficheros de scaffold copiados desde este repo, conserva:
+- los encabezados SPDX cuando existan;
+- `COPYING.LESSER`;
+- y `COPYING`.
+
+Los proyectos instanciados pueden añadir contenido propio, pero los ficheros derivados del scaffold deben mantener su trazabilidad de licencia.

@@ -13,4 +13,5 @@ Actualiza `workbench/task_result.md` con:
 
 Además:
 - actualiza `workbench/WORKBENCH_STATE.md` reflejando el avance local;
+- deja claro qué estados heredados han sido ejecutados o quedan en revisión;
 - guarda una copia histórica numerada en `workbench/history/`.

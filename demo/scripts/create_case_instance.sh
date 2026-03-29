@@ -118,6 +118,14 @@ Ambos workspaces abren la **misma raíz del proyecto del caso**.
 ## Entorno técnico
 - Formato preferido de dependencias: \`pyproject.toml\`.
 - Entorno virtual local del proyecto: \`.venv/\` en la raíz del repo del caso.
+
+## Licencia del scaffold
+Algunos ficheros de scaffold copiados desde \`ai-ds-project\` están bajo **LGPL-3.0-or-later**.
+Este repo incluye:
+- \`COPYING.LESSER\`
+- \`COPYING\`
+
+Si redistribuyes los ficheros derivados del scaffold, conserva sus avisos de licencia y trazabilidad.
 EOF2
 }
 
