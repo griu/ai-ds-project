@@ -8,6 +8,7 @@ Actualiza `control/review_notes.md` con:
 - estado de cierre
 - riesgos
 - recomendación de siguiente paso
+- y si el flujo puede continuar automáticamente o debe detenerse
 
 Actualiza también:
 - `control/WORKFLOW_STATE.md`

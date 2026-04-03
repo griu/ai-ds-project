@@ -4,12 +4,6 @@ description: Crear la primera tarea del proyecto a partir del contexto inicial
 agent: control-orchestrator
 ---
 
-Lee `control/project_context.md`, `control/jury_and_demo_goals.md`, `control/CLAUDE.md` y `control/PROJECT_TECHNICAL_REQUIREMENTS.md`.
-Redacta la primera versión de `control/next_task.md`.
+Lee `control/CLAUDE.md`, `control/project_context.md`, `control/jury_and_demo_goals.md`, `control/PROJECT_TECHNICAL_REQUIREMENTS.md`, `control/WORKFLOW_STATE.md`, `control/AUTOMATION_POLICY.md` y `workbench/WORKBENCH_STATE.md`.
 
-Debe ser una tarea:
-- pequeña;
-- gobernada;
-- verificable;
-- alineada con el estado real del caso;
-- y compatible con los requisitos del framework.
+Redacta la primera versión de `control/next_task.md` y actualiza `control/WORKFLOW_STATE.md`.

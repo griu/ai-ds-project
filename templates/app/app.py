@@ -66,6 +66,7 @@ project_context_md = read_text_if_exists(control_path / "project_context.md")
 jury_goals_md = read_text_if_exists(control_path / "jury_and_demo_goals.md")
 tech_req_md = read_text_if_exists(control_path / "PROJECT_TECHNICAL_REQUIREMENTS.md")
 demo_workflow_md = read_text_if_exists(control_path / "DEMO_WORKFLOW_STANDARD.md")
+automation_policy_md = read_text_if_exists(control_path / "AUTOMATION_POLICY.md")
 
 control_df = parse_control_workflow(control_workflow_md)
 wb_df = parse_workbench_state(workbench_state_md)
@@ -157,6 +158,7 @@ if selected_tab == "Cockpit":
             f"{control_dir}/next_task.md",
             f"{control_dir}/review_notes.md",
             f"{control_dir}/WORKFLOW_STATE.md",
+            f"{control_dir}/AUTOMATION_POLICY.md",
             f"{workbench_dir}/task_result.md",
             f"{workbench_dir}/WORKBENCH_STATE.md",
         ]:
@@ -214,6 +216,7 @@ elif selected_tab == "Artifacts Explorer":
         "control/jury_and_demo_goals.md": jury_goals_md,
         "control/PROJECT_TECHNICAL_REQUIREMENTS.md": tech_req_md,
         "control/DEMO_WORKFLOW_STANDARD.md": demo_workflow_md,
+        "control/AUTOMATION_POLICY.md": automation_policy_md,
     }
     artifact_name = st.selectbox("Artifact", list(artifact_map.keys()))
     content = artifact_map[artifact_name]
@@ -326,6 +329,7 @@ L’app llegeix directament:
 - `control/review_notes.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/DEMO_WORKFLOW_STANDARD.md`
+- `control/AUTOMATION_POLICY.md`
 - `workbench/WORKBENCH_STATE.md`
 - `workbench/task_result.md`
 - `control/history/**/*.md`

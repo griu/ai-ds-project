@@ -7,10 +7,12 @@ Repositorio maestro del framework de demo para proyectos de Data Science goberna
 ## Qué contiene
 - `templates/control/`: plantilla del área de gobierno del proyecto.
 - `templates/workbench/`: plantilla del área de ejecución del proyecto.
+- `templates/app/`: plantilla de la app Streamlit de seguimiento y cockpit operativo.
 - `demo/cases/<slug>/control/`: overlays del caso para `control/`.
 - `demo/cases/<slug>/workbench/`: overlays del caso para `workbench/`.
 - `demo/scripts/`: scripts para instanciar un proyecto nuevo y publicarlo.
 - `docs/PROJECT_CONTINUITY_MEMORY.md`: memoria amplia de contexto, visión y criterios de evolución del proyecto.
+- `docs/STREAMLIT_APP_INTEGRATION_NOTES.md`: notas de integración de la app Streamlit.
 
 ## Modelo operativo
 Este repo **no es** el proyecto activo del caso.
@@ -24,20 +26,28 @@ Sirve como:
 ## Qué se crea por cada caso
 Cada caso se instancia como **un único repo nuevo fuera de este repo maestro**.
 
-Dentro del caso instanciado quedan dos áreas de trabajo:
+Dentro del caso instanciado quedan tres piezas prácticas:
 - `control/`
 - `workbench/`
+- `app/`
 
-Y además se generan dos workspaces en la raíz del caso:
+Y además se generan workspaces en la raíz del caso:
 - `control.code-workspace`
 - `workbench.code-workspace`
+- `app.code-workspace`
 
-Los dos workspaces abren **la misma raíz del proyecto del caso**.
+Los workspaces abren la **misma raíz del proyecto del caso**.
+
+## Papel de cada capa
+- `control/`: gobierno, revisión, decisión del siguiente paso y mantenimiento del estado global.
+- `workbench/`: ejecución técnica, análisis, generación de artefactos y mantenimiento del estado local de ejecución.
+- `app/`: cockpit visual Streamlit para seguir el flujo, explorar artefactos y operar con más comodidad.
 
 ## Documentos estables de gobierno y seguimiento
 En cada caso instanciado:
-- `control/WORKFLOW_STATE.md` es la fuente de verdad del estado global;
+- `control/WORKFLOW_STATE.md` es la fuente de verdad del estado global.
 - `workbench/WORKBENCH_STATE.md` refleja el estado local de ejecución alineado con control.
+- `control/AUTOMATION_POLICY.md` define cuándo `control` puede invocar `workbench` y cuándo el flujo debe pararse.
 
 ## Filosofía de prompts
 Los prompts recurrentes deben ser:
@@ -51,7 +61,30 @@ Las reglas estables deben vivir preferentemente en:
 - `control/DEMO_WORKFLOW_STANDARD.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/WORKFLOW_STATE.md`
+- `control/AUTOMATION_POLICY.md`
 - `workbench/WORKBENCH_STATE.md`
+
+## Cómo borrar y volver a crear un caso
+Ejemplo genérico:
+
+```bash
+AI_DS_PROJECT_ROOT="/ruta/a/ai-ds-project"
+CASE_SLUG="home-credit"
+CASES_PARENT_DIR="$(dirname "$AI_DS_PROJECT_ROOT")"
+CASE_REPO="$CASES_PARENT_DIR/$CASE_SLUG"
+
+rm -rf "$CASE_REPO"
+
+bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh"   "$AI_DS_PROJECT_ROOT"   "$CASE_SLUG"   "$CASES_PARENT_DIR"
+```
+
+Después puedes abrir:
+
+```bash
+code -n "$CASE_REPO/control.code-workspace"
+code -n "$CASE_REPO/workbench.code-workspace"
+code -n "$CASE_REPO/app.code-workspace"
+```
 
 ---
 
@@ -66,12 +99,6 @@ Prepara una carpeta de entrada con:
 - requisitos adicionales del caso;
 - y, si existe, una propuesta inicial de nombre o `slug` del caso.
 
-Ejemplo de carpeta de trabajo:
-- `incoming_case_docs/`
-- `incoming_case_docs/README_case_input.md`
-- `incoming_case_docs/requirements_extra.md`
-- documentos PDF, Word, Markdown, CSV, XLSX, etc.
-
 ## Prompt completo
 
 ```text
@@ -84,16 +111,20 @@ Tu misión es analizar la documentación de entrada, traducirla a especificacion
 Debes trabajar apoyándote explícitamente en los contextos ya existentes del repositorio, en especial:
 - `README.md`
 - `docs/PROJECT_CONTINUITY_MEMORY.md`
+- `docs/STREAMLIT_APP_INTEGRATION_NOTES.md`
 - `templates/control/DEMO_WORKFLOW_STANDARD.md`
 - `templates/control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `templates/control/WORKFLOW_STATE.md`
+- `templates/control/AUTOMATION_POLICY.md`
 - `templates/control/CLAUDE.md`
 - `templates/workbench/CLAUDE.md`
 - `templates/control/README.md`
 - `templates/workbench/README.md`
+- `templates/app/README.md`
 - `demo/DEMO_HACKATHON_PLAYBOOK.md`
 - la estructura actual de `templates/control`
 - la estructura actual de `templates/workbench`
+- la estructura actual de `templates/app`
 - y los casos ya existentes en `demo/cases`, si sirven como referencia reusable.
 
 ### Inputs del encargo
@@ -138,10 +169,12 @@ Debes generar, como mínimo:
 ### Criterios de adaptación
 Debes mantener coherencia con:
 - la separación entre `control` y `workbench`;
+- la existencia del cockpit `app/`;
 - el uso de workspaces en raíz del caso;
 - la filosofía de prompts ligeros;
 - el estado global en `control/WORKFLOW_STATE.md`;
 - el estado local en `workbench/WORKBENCH_STATE.md`;
+- la política de automatización de `control/AUTOMATION_POLICY.md`;
 - la existencia de una fase explícita de definición de muestras;
 - los requisitos de EDA, modelado, YAML, Optuna, PDP, SHAP, monotonicidades, fairness y validación humana ya definidos en el framework.
 
@@ -173,27 +206,3 @@ Tu respuesta debe venir en este orden:
 6. `Artefactos concretos a crear o actualizar`
 7. `Observaciones de coherencia con el framework`
 ```
-
-## Cuándo usar este prompt
-Úsalo cuando:
-- llegue nueva documentación de un caso;
-- quieras convertir un briefing disperso en un nuevo `demo/cases/<slug>/`;
-- quieras crear un caso reusable y bien alineado con la arquitectura del repositorio.
-
-## Recomendación operativa
-Antes de ejecutar este prompt, conviene revisar también:
-- `docs/PROJECT_CONTINUITY_MEMORY.md`
-
-para asegurar que el nuevo caso quede alineado no solo con la estructura técnica actual, sino también con la visión, los criterios y el sentido general del proyecto.
-
----
-
-## Licencia
-ai-ds-project se distribuye bajo **LGPL-3.0-or-later**.
-
-Al redistribuir o reutilizar los ficheros de scaffold copiados desde este repo, conserva:
-- los encabezados SPDX cuando existan;
-- `COPYING.LESSER`;
-- y `COPYING`.
-
-Los proyectos instanciados pueden añadir contenido propio, pero los ficheros derivados del scaffold deben mantener su trazabilidad de licencia.

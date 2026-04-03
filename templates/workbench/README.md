@@ -24,8 +24,12 @@ Debes respetar siempre:
 - `control/next_task.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/WORKFLOW_STATE.md`
+- `control/AUTOMATION_POLICY.md`
 
 La actualización de `control/WORKFLOW_STATE.md` corresponde a `control`, no a `workbench`.
+
+## Regla de limpieza
+`workbench/task_result.md` debe reflejar solo el resultado de la tarea actual o de la última ejecución cerrada, sin acumular resultados antiguos.
 
 ## Reglas operativas importantes
 - El caso debe usar un `.venv/` propio creado desde cero en la raíz del repo.

@@ -10,7 +10,7 @@ from typing import Any
 import pandas as pd
 
 STATUS_ORDER = {"Pendiente": 0, "En curso": 1, "En revisión": 2, "Finalizado": 3}
-WORKBENCH_STATUS_ORDER = {"Pendiente": 0, "En curso": 1, "En revisión": 2, "Finalizado": 3}
+WORKBENCH_STATUS_ORDER = {"Pendiente": 0, "En curso": 1, "En revisión": 2, "Finalizado": 3, "Ejecutado": 3}
 
 
 @dataclass
@@ -119,7 +119,10 @@ def parse_workbench_state(md_text: str | None) -> pd.DataFrame:
         if stripped.startswith("- Estado global heredado:"):
             current["global_status"] = stripped.split(":", 1)[1].strip()
         elif stripped.startswith("- Estado local en workbench:"):
-            current["local_status"] = stripped.split(":", 1)[1].strip()
+            status = stripped.split(":", 1)[1].strip()
+            if status == "Ejecutado":
+                status = "Finalizado"
+            current["local_status"] = status
         elif stripped.startswith("- Última ejecución:"):
             current["last_execution"] = stripped.split(":", 1)[1].strip()
         elif stripped.startswith("- ") and not stripped.startswith("- Estado") and not stripped.startswith("- Última"):

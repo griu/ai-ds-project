@@ -623,3 +623,29 @@ Su función es preservar:
 - la intención;
 - la metodología;
 - y el sentido del sistema.
+
+
+---
+
+# 24. Capa Streamlit / app
+
+La capa `app/` se introdujo como **cockpit visual** del sistema.
+
+No sustituye a `control` ni a `workbench`.
+Su papel es:
+- visualizar el estado global y local;
+- explorar artefactos;
+- facilitar la operación manual o supervisada;
+- y hacer la demo más comprensible y potente.
+
+La fuente de verdad sigue estando en los markdowns y artefactos del caso.
+
+# 25. Automatización control -> workbench
+
+La evolución natural del framework es permitir que `control` invoque realmente a `workbench` mientras no aparezcan condiciones de parada humana.
+
+El principio fijado es:
+- el flujo puede continuar automáticamente mientras avance dentro del plan previsto;
+- si hay replanificación, reapertura fuerte, contradicción o validación humana obligatoria, el flujo se detiene.
+
+Esto no cambia la traza documental, solo añade capacidad de orquestación semi-autónoma.

@@ -8,6 +8,12 @@ App de Streamlit per visualitzar i gestionar la interacció entre `control/` i `
 - Recomana quin agent hauria d'actuar a continuació.
 - Mostra l'històric propi dels markdowns i, opcionalment, el Git history.
 - Permet treballar prompts des de la mateixa interfície sense crear nous logs.
+- Llegeix també la política d'automatització de `control/AUTOMATION_POLICY.md`.
+
+## Què no fa
+- No substitueix `control` ni `workbench` com a actors del flux.
+- No és la font de veritat dels estats.
+- No redefineix per si sola el workflow.
 
 ## Instal·lació
 Des de la carpeta arrel del cas:
@@ -23,15 +29,12 @@ pip install -r app/requirements.txt
 bash app/run_streamlit.sh 8501
 ```
 
-Obre després el navegador a:
-- `http://<host>:8501`
-
-## Múltiples instàncies
-Per obrir diversos casos alhora, assigna un port diferent a cada repo:
-- cas 1 → `8501`
-- cas 2 → `8502`
-- cas 3 → `8503`
-
-## Configuració del cas
-L'app llegeix `app/case_config.json` per mostrar el títol i els paths del cas.
-Aquest fitxer s'ha d'escriure automàticament durant `create_case_instance.sh`.
+## Fonts de veritat que consumeix
+- `control/WORKFLOW_STATE.md`
+- `control/AUTOMATION_POLICY.md`
+- `control/next_task.md`
+- `control/review_notes.md`
+- `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
+- `control/DEMO_WORKFLOW_STANDARD.md`
+- `workbench/WORKBENCH_STATE.md`
+- `workbench/task_result.md`

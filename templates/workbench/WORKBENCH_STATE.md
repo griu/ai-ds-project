@@ -15,21 +15,14 @@ Este documento refleja el estado local de ejecución de `workbench`, alineado co
 ## Relación con control
 - La fuente de verdad global es `control/WORKFLOW_STATE.md`.
 - Este documento no sustituye a `control/WORKFLOW_STATE.md`.
-- Su función es mostrar:
-  - qué estados han sido asignados o heredados por `workbench`;
-  - cuáles ya fueron ejecutados;
-  - cuáles siguen pendientes;
-  - cuáles están en curso;
-  - y cuáles han vuelto a `En revisión`.
 
 ## Estados locales admitidos
 - **Pendiente**
 - **En curso**
-- **Ejecutado**
+- **Finalizado**
 - **En revisión**
 
 ## Plantilla de seguimiento local
-
 ### 01. Framing del caso
 - Estado global heredado: Pendiente
 - Estado local en workbench: Pendiente

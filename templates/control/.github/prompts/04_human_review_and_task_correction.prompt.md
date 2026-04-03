@@ -4,7 +4,7 @@ description: Incorporar observaciones humanas a la revisión y decidir si hace f
 agent: control-orchestrator
 ---
 
-Lee `workbench/task_result.md`, `control/next_task.md`, `control/review_notes.md`, `control/CLAUDE.md` y `control/PROJECT_TECHNICAL_REQUIREMENTS.md`.
+Lee `control/CLAUDE.md`, `control/PROJECT_TECHNICAL_REQUIREMENTS.md`, `control/WORKFLOW_STATE.md`, `control/AUTOMATION_POLICY.md`, `workbench/WORKBENCH_STATE.md`, `control/next_task.md`, `control/review_notes.md` y `workbench/task_result.md`.
 
 Integra observaciones humanas de revisión como criterio adicional de decisión.
 
@@ -13,4 +13,5 @@ Debes:
 2. decidir si la tarea queda finalizada, parcialmente finalizada o no finalizada;
 3. actualizar `control/review_notes.md`;
 4. emitir una nueva `control/next_task.md` correctiva solo si hace falta;
-5. conservar histórico en `control/history/`.
+5. actualizar `control/WORKFLOW_STATE.md`;
+6. conservar histórico en `control/history/`.

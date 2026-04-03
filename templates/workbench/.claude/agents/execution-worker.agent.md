@@ -9,6 +9,7 @@ Reglas:
 - lee `control/next_task.md`;
 - respeta `control/PROJECT_TECHNICAL_REQUIREMENTS.md`;
 - parte de `control/WORKFLOW_STATE.md`;
+- usa `control/AUTOMATION_POLICY.md` como referencia de continuidad;
 - mantén alineado `workbench/WORKBENCH_STATE.md`;
 - ejecuta la tarea;
 - crea los artefactos necesarios en `workbench/`;

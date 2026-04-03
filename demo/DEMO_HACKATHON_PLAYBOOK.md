@@ -23,38 +23,33 @@ Este framework incorpora requisitos explícitos para:
 - `templates/control/DEMO_WORKFLOW_STANDARD.md`
 - `templates/control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `templates/control/WORKFLOW_STATE.md`
-
-El primero define la dinámica operativa.  
-El segundo define los requisitos técnicos obligatorios.  
-El tercero mantiene visible el estado del plan de trabajo.
+- `templates/control/AUTOMATION_POLICY.md`
+- `templates/workbench/WORKBENCH_STATE.md`
+- `templates/app/README.md`
+- `docs/PROJECT_CONTINUITY_MEMORY.md`
 
 ## Workspaces
 Cada caso instanciado crea:
 - `control.code-workspace`
 - `workbench.code-workspace`
+- `app.code-workspace`
 
-Ambos abren la misma raíz del caso.
+Todos abren la misma raíz del caso.
 
 ## Regla de simplificación
 La lógica estable debe vivir sobre todo en:
 - `control/CLAUDE.md`
+- `workbench/CLAUDE.md`
 - `control/DEMO_WORKFLOW_STANDARD.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/WORKFLOW_STATE.md`
-- `workbench/CLAUDE.md`
-
-Los prompts recurrentes deben ser lo más ligeros posible.
+- `control/AUTOMATION_POLICY.md`
+- `workbench/WORKBENCH_STATE.md`
 
 ## Flujo
 1. `control` define.
 2. `workbench` ejecuta.
-3. `control` revisa, actualiza `WORKFLOW_STATE.md` y decide.
-4. Si hace falta, la persona aporta observaciones vía `control`.
-5. Repetir.
-
-## Reapertura del flujo
-El framework soporta reabrir un estado concreto del plan de trabajo:
-- marcando ese estado como `En revisión`;
-- marcando estados posteriores afectados también como `En revisión`, si corresponde;
-- generando una nueva `control/next_task.md` correctiva;
-- y retomando luego el flujo normal.
+3. `control` revisa, actualiza estados y decide.
+4. La app ayuda a seguir y operar el flujo.
+5. Si hace falta, la persona aporta observaciones vía `control`.
+6. Repetir.

@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: LGPL-3.0-or-later
 set -euo pipefail
 
 usage() {
   cat <<'USAGE'
 Uso:
   bash demo/scripts/create_case_instance.sh <master_repo> <case_slug> [target_parent_dir] [target_repo_name]
+
+Argumentos:
+  <master_repo>        Ruta al repo maestro ai-ds-project
+  <case_slug>          Nombre del overlay del caso, por ejemplo: home-credit
+  [target_parent_dir]  Directorio padre donde crear el caso. Si no se informa, se usa el padre de <master_repo>.
+  [target_repo_name]   Nombre real del repo de salida. Si no se informa, se usa <case_slug>.
 USAGE
 }
 
@@ -23,11 +30,20 @@ remove_nested_git_dirs() {
 write_root_gitignore() {
   local target_repo="$1"
   cat > "$target_repo/.gitignore" <<'GITIGNORE'
+# Python
 **/__pycache__/
 **/*.pyc
 **/.pytest_cache/
+**/.mypy_cache/
 **/.ruff_cache/
+
+# Project virtual environment
 .venv/
+
+# Jupyter
+**/.ipynb_checkpoints/
+
+# Editor / OS
 .vscode/
 .DS_Store
 Thumbs.db
@@ -52,17 +68,45 @@ EOF2
 
 write_root_readme() {
   local target_repo="$1"
-  local case_slug="$2"
+  local target_repo_name="$2"
   cat > "$target_repo/README.md" <<EOF2
-# ${case_slug}
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 
-Proyecto instanciado a partir de ai-ds-project.
+# ${target_repo_name}
+
+Proyecto instanciado a partir de \`ai-ds-project\`.
 
 ## Estructura
-- \\`control/\\`: define y revisa la siguiente tarea.
-- \\`workbench/\\`: ejecuta la tarea y devuelve resultado.
-- \\`app/\\`: cockpit visual de control + workbench en Streamlit.
+- \`control/\`: define y revisa la siguiente tarea.
+- \`workbench/\`: ejecuta la tarea y devuelve resultado.
+- \`app/\`: cockpit visual Streamlit para seguir el flujo.
+
+## Workspaces
+- \`control.code-workspace\`
+- \`workbench.code-workspace\`
+- \`app.code-workspace\`
+
+Todos los workspaces abren la **misma raíz del proyecto del caso**.
+
+## Documentos clave
+- \`control/DEMO_WORKFLOW_STANDARD.md\`
+- \`control/PROJECT_TECHNICAL_REQUIREMENTS.md\`
+- \`control/WORKFLOW_STATE.md\`
+- \`control/AUTOMATION_POLICY.md\`
+- \`workbench/WORKBENCH_STATE.md\`
+
+## Flujo operativo
+1. Abre \`control.code-workspace\`.
+2. Abre \`workbench.code-workspace\`.
+3. Abre \`app.code-workspace\` si quieres cockpit visual.
 EOF2
+}
+
+copy_license_files_if_present() {
+  local master_repo="$1"
+  local target_repo="$2"
+  [[ -f "$master_repo/COPYING.LESSER" ]] && cp "$master_repo/COPYING.LESSER" "$target_repo/COPYING.LESSER"
+  [[ -f "$master_repo/COPYING" ]] && cp "$master_repo/COPYING" "$target_repo/COPYING"
 }
 
 write_app_case_config() {
@@ -107,30 +151,61 @@ main() {
   local TARGET_WORKBENCH="$TARGET_REPO/workbench"
   local TARGET_APP="$TARGET_REPO/app"
 
+  [[ -d "$MASTER_REPO" ]] || { echo "ERROR: no existe master_repo: $MASTER_REPO" >&2; exit 1; }
+  [[ -d "$CONTROL_TEMPLATE" ]] || { echo "ERROR: no existe templates/control: $CONTROL_TEMPLATE" >&2; exit 1; }
+  [[ -d "$WORKBENCH_TEMPLATE" ]] || { echo "ERROR: no existe templates/workbench: $WORKBENCH_TEMPLATE" >&2; exit 1; }
+  [[ -d "$TARGET_PARENT_DIR" ]] || { echo "ERROR: no existe target_parent_dir: $TARGET_PARENT_DIR" >&2; exit 1; }
+  if [[ -e "$TARGET_REPO" ]]; then
+    echo "ERROR: el destino ya existe: $TARGET_REPO" >&2
+    exit 1
+  fi
+
+  echo ">>> Creando repo destino: $TARGET_REPO"
   mkdir -p "$TARGET_CONTROL" "$TARGET_WORKBENCH" "$TARGET_APP"
+
+  echo ">>> Copiando plantilla de control"
   copy_dir_contents "$CONTROL_TEMPLATE" "$TARGET_CONTROL"
+  echo ">>> Copiando plantilla de workbench"
   copy_dir_contents "$WORKBENCH_TEMPLATE" "$TARGET_WORKBENCH"
   if [[ -d "$APP_TEMPLATE" ]]; then
+    echo ">>> Copiando plantilla de app"
     copy_dir_contents "$APP_TEMPLATE" "$TARGET_APP"
   fi
-  if [[ -d "$CONTROL_OVERLAY" ]]; then copy_dir_contents "$CONTROL_OVERLAY" "$TARGET_CONTROL"; fi
-  if [[ -d "$WORKBENCH_OVERLAY" ]]; then copy_dir_contents "$WORKBENCH_OVERLAY" "$TARGET_WORKBENCH"; fi
 
+  if [[ -d "$CONTROL_OVERLAY" ]]; then
+    echo ">>> Aplicando overlay de control para el caso: $CASE_SLUG"
+    copy_dir_contents "$CONTROL_OVERLAY" "$TARGET_CONTROL"
+  else
+    echo ">>> Sin overlay específico de control para el caso: $CASE_SLUG"
+  fi
+  if [[ -d "$WORKBENCH_OVERLAY" ]]; then
+    echo ">>> Aplicando overlay de workbench para el caso: $CASE_SLUG"
+    copy_dir_contents "$WORKBENCH_OVERLAY" "$TARGET_WORKBENCH"
+  else
+    echo ">>> Sin overlay específico de workbench para el caso: $CASE_SLUG"
+  fi
+
+  echo ">>> Eliminando posibles .git heredados dentro del contenido copiado"
   remove_nested_git_dirs "$TARGET_REPO"
+  copy_license_files_if_present "$MASTER_REPO" "$TARGET_REPO"
   write_root_gitignore "$TARGET_REPO"
-  write_root_readme "$TARGET_REPO" "$CASE_SLUG"
+  write_root_readme "$TARGET_REPO" "$TARGET_REPO_NAME"
   write_workspace_file "$TARGET_REPO" "control.code-workspace" "$TARGET_REPO_NAME · control"
   write_workspace_file "$TARGET_REPO" "workbench.code-workspace" "$TARGET_REPO_NAME · workbench"
   write_workspace_file "$TARGET_REPO" "app.code-workspace" "$TARGET_REPO_NAME · app"
-  write_app_case_config "$TARGET_APP" "$TARGET_REPO_NAME" "$CASE_SLUG"
+  [[ -d "$TARGET_APP" ]] && write_app_case_config "$TARGET_APP" "$TARGET_REPO_NAME" "$CASE_SLUG"
 
   git -c init.defaultBranch=main init "$TARGET_REPO"
   git -C "$TARGET_REPO" add .
   git -C "$TARGET_REPO" commit -m "Initialize case $TARGET_REPO_NAME (overlay: $CASE_SLUG) from ai-ds-project template"
 
-  echo "Repo: $TARGET_REPO"
-  echo "App workspace: $TARGET_REPO/app.code-workspace"
-  echo "Run app: bash $TARGET_REPO/app/run_streamlit.sh 8501"
+  echo
+  echo ">>> Caso creado correctamente"
+  echo "Repo:                $TARGET_REPO"
+  echo "Control workspace:   $TARGET_REPO/control.code-workspace"
+  echo "Workbench workspace: $TARGET_REPO/workbench.code-workspace"
+  echo "App workspace:       $TARGET_REPO/app.code-workspace"
+  echo "Run app:             bash $TARGET_REPO/app/run_streamlit.sh 8501"
 }
 
 main "$@"
