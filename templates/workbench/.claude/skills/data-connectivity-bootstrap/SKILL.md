@@ -9,7 +9,7 @@ Si la tarea lo pide, prepara:
 - `pyproject.toml` en la raíz del repo del caso
 - `.venv/` en la raíz del repo del caso
 
-Reglas adicionales:
+Regla adicional:
 - crea el `.venv/` del caso desde cero;
 - no reutilices entornos Python preexistentes del sistema como entorno operativo del caso.
 

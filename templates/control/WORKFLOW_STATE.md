@@ -19,7 +19,11 @@ Debe actualizarse:
 
 Cuando un estado quede **Finalizado**, debe incluir:
 - fecha de cierre en formato `DD-MM-YYYY`;
-- y un resumen compacto del cierre.
+- y un resumen compacto del cierre:
+  - una o dos líneas, o
+  - entre 3 y 4 bullets breves.
+
+---
 
 ## 01. Framing del caso
 - Estado: Pendiente

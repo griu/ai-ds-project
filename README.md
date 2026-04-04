@@ -7,7 +7,7 @@ Repositorio maestro del framework de demo para proyectos de Data Science goberna
 ## Qué contiene
 - `templates/control/`: plantilla del área de gobierno del proyecto.
 - `templates/workbench/`: plantilla del área de ejecución del proyecto.
-- `templates/app/`: plantilla de la app Streamlit de seguimiento y cockpit operativo.
+- `templates/app/`: plantilla de la app Streamlit de monitorización y guía operativa.
 - `demo/cases/<slug>/control/`: overlays del caso para `control/`.
 - `demo/cases/<slug>/workbench/`: overlays del caso para `workbench/`.
 - `demo/scripts/`: scripts para instanciar un proyecto nuevo y publicarlo.
@@ -26,28 +26,39 @@ Sirve como:
 ## Qué se crea por cada caso
 Cada caso se instancia como **un único repo nuevo fuera de este repo maestro**.
 
-Dentro del caso instanciado quedan tres piezas prácticas:
+Dentro del caso instanciado quedan tres piezas:
 - `control/`
 - `workbench/`
 - `app/`
 
-Y además se generan workspaces en la raíz del caso:
+Y además se generan tres workspaces en la raíz del caso:
 - `control.code-workspace`
 - `workbench.code-workspace`
 - `app.code-workspace`
 
-Los workspaces abren la **misma raíz del proyecto del caso**.
+Los tres workspaces abren **la misma raíz del proyecto del caso**.
 
-## Papel de cada capa
-- `control/`: gobierno, revisión, decisión del siguiente paso y mantenimiento del estado global.
-- `workbench/`: ejecución técnica, análisis, generación de artefactos y mantenimiento del estado local de ejecución.
-- `app/`: cockpit visual Streamlit para seguir el flujo, explorar artefactos y operar con más comodidad.
+## Papel de cada pieza
+### `control/`
+Gobierna el proyecto desde VS Code.  
+Define la tarea, revisa el resultado, actualiza estados y, cuando procede, vuelve a invocar a `workbench` como subagente dentro del mismo ciclo de conversación.
+
+### `workbench/`
+Ejecuta la tarea técnica definida por `control`.  
+No redefine el plan por su cuenta. Produce artefactos, actualiza su estado local y devuelve el resultado de la tarea actual.
+
+### `app/`
+La app Streamlit actúa como **cockpit de monitorización y guía**:
+- muestra el estado global y local;
+- ayuda a leer la traza del proyecto;
+- orienta sobre siguientes pasos y prompts;
+- pero **no es el motor principal de ejecución** del bucle autónomo.
 
 ## Documentos estables de gobierno y seguimiento
 En cada caso instanciado:
-- `control/WORKFLOW_STATE.md` es la fuente de verdad del estado global.
-- `workbench/WORKBENCH_STATE.md` refleja el estado local de ejecución alineado con control.
-- `control/AUTOMATION_POLICY.md` define cuándo `control` puede invocar `workbench` y cuándo el flujo debe pararse.
+- `control/WORKFLOW_STATE.md` es la fuente de verdad del estado global;
+- `workbench/WORKBENCH_STATE.md` refleja el estado local de ejecución alineado con control;
+- `control/AUTOMATION_POLICY.md` define la política de avance autónomo desde `control`.
 
 ## Filosofía de prompts
 Los prompts recurrentes deben ser:
@@ -59,48 +70,22 @@ Las reglas estables deben vivir preferentemente en:
 - `control/CLAUDE.md`
 - `workbench/CLAUDE.md`
 - `control/DEMO_WORKFLOW_STANDARD.md`
+- `control/AUTOMATION_POLICY.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/WORKFLOW_STATE.md`
-- `control/AUTOMATION_POLICY.md`
 - `workbench/WORKBENCH_STATE.md`
 
-## Cómo borrar y volver a crear un caso
-Ejemplo genérico:
-
-```bash
-AI_DS_PROJECT_ROOT="/ruta/a/ai-ds-project"
-CASE_SLUG="home-credit"
-CASES_PARENT_DIR="$(dirname "$AI_DS_PROJECT_ROOT")"
-CASE_REPO="$CASES_PARENT_DIR/$CASE_SLUG"
-
-rm -rf "$CASE_REPO"
-
-bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh"   "$AI_DS_PROJECT_ROOT"   "$CASE_SLUG"   "$CASES_PARENT_DIR"
-```
-
-Después puedes abrir:
-
-```bash
-code -n "$CASE_REPO/control.code-workspace"
-code -n "$CASE_REPO/workbench.code-workspace"
-code -n "$CASE_REPO/app.code-workspace"
-```
-
----
-
-# Prompt de arranque para generar un nuevo caso en `demo/cases`
-
+## Prompt de arranque para generar un nuevo caso en `demo/cases`
 Usa este prompt cuando quieras que el asistente convierta documentación de entrada en una nueva estructura de caso bajo `demo/cases/<case_slug>/`.
 
-## Preparación mínima recomendada
+### Preparación mínima recomendada
 Prepara una carpeta de entrada con:
 - la lista de documentos disponibles;
 - el detalle explicativo de qué es cada documento y para qué sirve;
 - requisitos adicionales del caso;
 - y, si existe, una propuesta inicial de nombre o `slug` del caso.
 
-## Prompt completo
-
+### Prompt completo
 ```text
 Quiero crear un nuevo caso dentro de `demo/cases` de `ai-ds-project`.
 
@@ -111,16 +96,15 @@ Tu misión es analizar la documentación de entrada, traducirla a especificacion
 Debes trabajar apoyándote explícitamente en los contextos ya existentes del repositorio, en especial:
 - `README.md`
 - `docs/PROJECT_CONTINUITY_MEMORY.md`
-- `docs/STREAMLIT_APP_INTEGRATION_NOTES.md`
 - `templates/control/DEMO_WORKFLOW_STANDARD.md`
+- `templates/control/AUTOMATION_POLICY.md`
 - `templates/control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `templates/control/WORKFLOW_STATE.md`
-- `templates/control/AUTOMATION_POLICY.md`
 - `templates/control/CLAUDE.md`
 - `templates/workbench/CLAUDE.md`
+- `templates/app/README.md`
 - `templates/control/README.md`
 - `templates/workbench/README.md`
-- `templates/app/README.md`
 - `demo/DEMO_HACKATHON_PLAYBOOK.md`
 - la estructura actual de `templates/control`
 - la estructura actual de `templates/workbench`
@@ -166,35 +150,12 @@ Debes generar, como mínimo:
   - `inputs/data_samples/`
 - y cualquier overlay adicional de workbench estrictamente necesario para arrancar el flujo
 
-### Criterios de adaptación
-Debes mantener coherencia con:
-- la separación entre `control` y `workbench`;
-- la existencia del cockpit `app/`;
-- el uso de workspaces en raíz del caso;
-- la filosofía de prompts ligeros;
-- el estado global en `control/WORKFLOW_STATE.md`;
-- el estado local en `workbench/WORKBENCH_STATE.md`;
-- la política de automatización de `control/AUTOMATION_POLICY.md`;
-- la existencia de una fase explícita de definición de muestras;
-- los requisitos de EDA, modelado, YAML, Optuna, PDP, SHAP, monotonicidades, fairness y validación humana ya definidos en el framework.
-
 ### Reglas de comportamiento
 - No inventes información específica del caso si no está sustentada por la documentación.
 - Si faltan piezas relevantes para definir correctamente el caso, debes detectarlo.
 - Si encuentras ambigüedades, contradicciones o vacíos respecto al esquema actual de modelización, debes parar antes de generar la estructura final.
 - En ese caso, formula preguntas explícitas y concretas al usuario sobre los puntos faltantes.
 - No generes la estructura definitiva hasta que esos puntos críticos estén aclarados o el usuario te indique que avances con supuestos explícitos.
-
-### Forma de trabajar
-Primero:
-1. resume qué has entendido del caso;
-2. identifica qué tipo de caso es;
-3. lista qué materiales reutilizarás del repositorio;
-4. identifica lagunas o contradicciones.
-
-Después:
-- si todo está suficientemente claro, genera la estructura propuesta para `demo/cases/<case_slug>/`;
-- si no está claro, formula preguntas cerradas o muy concretas antes de construirla.
 
 ### Formato de salida esperado
 Tu respuesta debe venir en este orden:
@@ -206,3 +167,19 @@ Tu respuesta debe venir en este orden:
 6. `Artefactos concretos a crear o actualizar`
 7. `Observaciones de coherencia con el framework`
 ```
+
+## Cuándo usar este prompt
+Úsalo cuando:
+- llegue nueva documentación de un caso;
+- quieras convertir un briefing disperso en un nuevo `demo/cases/<slug>/`;
+- quieras crear un caso reusable y bien alineado con la arquitectura del repositorio.
+
+## Recomendación operativa
+Antes de ejecutar este prompt, conviene revisar también:
+- `docs/PROJECT_CONTINUITY_MEMORY.md`
+- `templates/control/AUTOMATION_POLICY.md`
+
+para asegurar que el nuevo caso quede alineado no solo con la estructura técnica actual, sino también con la visión, los criterios y el sentido general del proyecto.
+
+## Licencia
+ai-ds-project se distribuye bajo **LGPL-3.0-or-later**.

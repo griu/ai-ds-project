@@ -10,7 +10,7 @@ from typing import Any
 import pandas as pd
 
 STATUS_ORDER = {"Pendiente": 0, "En curso": 1, "En revisión": 2, "Finalizado": 3}
-WORKBENCH_STATUS_ORDER = {"Pendiente": 0, "En curso": 1, "En revisión": 2, "Finalizado": 3, "Ejecutado": 3}
+WORKBENCH_STATUS_ORDER = {"Pendiente": 0, "En curso": 1, "En revisión": 2, "Finalizado": 3}
 
 
 @dataclass
@@ -119,10 +119,7 @@ def parse_workbench_state(md_text: str | None) -> pd.DataFrame:
         if stripped.startswith("- Estado global heredado:"):
             current["global_status"] = stripped.split(":", 1)[1].strip()
         elif stripped.startswith("- Estado local en workbench:"):
-            status = stripped.split(":", 1)[1].strip()
-            if status == "Ejecutado":
-                status = "Finalizado"
-            current["local_status"] = status
+            current["local_status"] = stripped.split(":", 1)[1].strip()
         elif stripped.startswith("- Última ejecución:"):
             current["last_execution"] = stripped.split(":", 1)[1].strip()
         elif stripped.startswith("- ") and not stripped.startswith("- Estado") and not stripped.startswith("- Última"):
@@ -235,12 +232,13 @@ def current_focus(control_df: pd.DataFrame, wb_df: pd.DataFrame) -> dict[str, An
     return {"step_no": None, "step_name": "No focus detected", "source": "n/a", "status": "n/a"}
 
 
+
 def build_prompt_catalog(case_root: Path, control_dir: str, workbench_dir: str) -> dict[str, str]:
     prompts = {}
     mapping = {
         "control_bootstrap": case_root / control_dir / ".github" / "prompts" / "01_bootstrap_project.prompt.md",
-        "control_review": case_root / control_dir / ".github" / "prompts" / "02_review_task_result.prompt.md",
-        "control_next_task": case_root / control_dir / ".github" / "prompts" / "03_define_next_task.prompt.md",
+        "control_autonomous_loop": case_root / control_dir / ".github" / "prompts" / "02_autonomous_control_orchestration.prompt.md",
+        "workbench_manual_execution": case_root / control_dir / ".github" / "prompts" / "03_workbench_manual_execution.prompt.md",
         "control_human_review": case_root / control_dir / ".github" / "prompts" / "04_human_review_and_task_correction.prompt.md",
         "control_resume": case_root / control_dir / ".github" / "prompts" / "05_reopen_or_resume_from_state.prompt.md",
     }
@@ -249,11 +247,15 @@ def build_prompt_catalog(case_root: Path, control_dir: str, workbench_dir: str) 
         if txt:
             prompts[key] = txt
     prompts.setdefault(
-        "workbench_iterate",
-        """Lee `control/next_task.md`, `control/PROJECT_TECHNICAL_REQUIREMENTS.md`, `control/WORKFLOW_STATE.md` y `workbench/WORKBENCH_STATE.md`.\n\nActúa como workbench del caso.\n\nDebes:\n- ejecutar la tarea pedida en `control/next_task.md`;\n- actualizar `workbench/WORKBENCH_STATE.md`;\n- dejar el resultado en `workbench/task_result.md`;\n- usar rutas relativas a la raíz del caso;\n- no modificar `control/WORKFLOW_STATE.md`.""",
-    )
-    prompts.setdefault(
         "control_modify_specs",
-        """Lee `control/PROJECT_TECHNICAL_REQUIREMENTS.md`, `control/review_notes.md`, `workbench/task_result.md` y `control/WORKFLOW_STATE.md`.\n\nActúa como control plane del caso.\n\nDebes:\n- actualizar las especificaciones técnicas o funcionales si la revisión humana lo requiere;\n- reflejar el cambio en `control/PROJECT_TECHNICAL_REQUIREMENTS.md`;\n- escribir la nueva instrucción operativa en `control/next_task.md`;\n- actualizar `control/WORKFLOW_STATE.md` antes de pasar a workbench.""",
+        """Lee `control/PROJECT_TECHNICAL_REQUIREMENTS.md`, `control/review_notes.md`, `workbench/task_result.md` y `control/WORKFLOW_STATE.md`.
+
+Actúa como control plane del caso.
+
+Debes:
+- actualizar las especificaciones técnicas o funcionales si la revisión humana lo requiere;
+- reflejar el cambio en `control/PROJECT_TECHNICAL_REQUIREMENTS.md`;
+- escribir la nueva instrucción operativa en `control/next_task.md`;
+- actualizar `control/WORKFLOW_STATE.md` antes de pasar a workbench.""",
     )
     return prompts

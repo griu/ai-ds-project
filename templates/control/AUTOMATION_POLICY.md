@@ -2,66 +2,83 @@
 
 # AUTOMATION_POLICY.md
 
-## Objetivo
-Definir cuándo `control` puede invocar `workbench` sin intervención humana y cuándo el flujo debe detenerse.
+## Propósito
+Definir cómo debe avanzar el flujo de forma autónoma desde el chat de `control` en VS Code usando `workbench` como subagente, sin alterar la traza documental principal del proyecto.
 
 ## Principio general
 El flujo puede continuar automáticamente mientras:
-- la siguiente tarea forme parte del plan esperado;
-- no se reabra una fase previa de forma material;
-- no falte información crítica;
-- no aparezca una decisión reservada a validación humana;
-- y no se supere el límite de saltos automáticos.
+- la siguiente tarea forme parte del plan previsto;
+- no haya replanificación;
+- no haya reapertura de fases previas;
+- no haya validación humana obligatoria;
+- no haya bloqueo técnico;
+- y no se alcance el límite de iteraciones automáticas.
 
-## Quién decide
-- `control` gobierna el flujo.
-- `workbench` ejecuta y devuelve estado.
-- `control` decide si continúa automáticamente o si debe parar.
+## Papel de cada componente
+### `control`
+- gobierna el proyecto;
+- redacta o limpia `control/next_task.md`;
+- invoca a `workbench` como subagente cuando procede;
+- revisa el resultado;
+- actualiza `control/review_notes.md`;
+- actualiza `control/WORKFLOW_STATE.md`;
+- decide si continúa o se detiene.
 
-## Continuación automática permitida
-`control` puede invocar `workbench` si:
-- existe una `control/next_task.md` clara y vigente;
-- la tarea es continuación natural del plan;
-- `workbench` no ha marcado bloqueo;
-- no hay necesidad de validación humana;
-- el contador de saltos automáticos es menor que el límite.
+### `workbench`
+- ejecuta exactamente la tarea activa;
+- no redefine el plan;
+- actualiza `workbench/task_result.md`;
+- actualiza `workbench/WORKBENCH_STATE.md`;
+- informa si hay bloqueo, replanificación o validación humana obligatoria.
 
-## Parada humana obligatoria
+### `app`
+- monitoriza estado y traza;
+- ayuda a orientar al usuario;
+- muestra prompts y artefactos;
+- pero **no es el motor principal de ejecución** del bucle autónomo.
+
+## Condiciones de continuación automática
+`control` puede seguir invocando a `workbench` si:
+- existe una tarea activa válida y limpia;
+- la tarea siguiente es continuidad natural del plan;
+- no aparece replanificación;
+- no aparece reapertura de una fase previa;
+- no hay contradicción metodológica relevante;
+- `workbench` no reporta bloqueo;
+- y el contador de iteraciones automáticas es menor que `10`.
+
+## Condiciones de parada humana
 El flujo debe detenerse si:
-- aparece una tarea nueva no prevista materialmente;
-- hay que redefinir una tarea anterior o fases previas;
+- aparece una decisión reservada a validación humana;
 - falta información crítica;
-- aparece contradicción documental o metodológica;
-- hay que decidir sobre:
-  - definición de muestras;
-  - exclusión de casos;
-  - transformación del target continuo;
-  - aceptación de variables sensibles o proxies;
-  - aprobación final del modelo;
-  - aprobación final del YAML.
+- se detecta contradicción relevante;
+- hay que redefinir una tarea previa;
+- aparece una tarea nueva no prevista;
+- se reabre una fase anterior;
+- `workbench` reporta bloqueo;
+- o se alcanza el límite de `10` iteraciones automáticas consecutivas.
+
+## Decisiones típicamente reservadas a la persona
+- definición final de la muestra;
+- exclusión de casos;
+- transformación del target continuo;
+- aceptación de variables sensibles o proxy;
+- aprobación final del modelo;
+- aprobación final del YAML definitivo.
+
+## Regla de limpieza documental
+### `control/next_task.md`
+Debe contener **solo** la tarea activa vigente.
+
+### `workbench/task_result.md`
+Debe contener **solo** el resultado de la tarea actual o de la última ejecución cerrada.
+
+La trazabilidad histórica debe vivir en:
+- Git;
+- `history/`;
+- o artefactos específicos,
+pero no como acumulación desordenada dentro de esos dos archivos.
 
 ## Límite de seguridad
-- Límite recomendado de saltos automáticos consecutivos: **10**.
-- Al llegar a ese límite, `control` debe parar y pedir revisión humana aunque no haya error.
-
-## Representación documental
-No es necesario añadir un estado nuevo si no hace falta.
-La parada humana puede representarse con:
-- `En revisión` en los estados;
-- explicación explícita en `control/review_notes.md`;
-- y notas de bloqueo o validación en `control/next_task.md` y `workbench/task_result.md`.
-
-## Convenciones mínimas
-### En `control/next_task.md`
-Incluir una sección breve de dispatch:
-- `automation_allowed`
-- `stop_if_replan_needed`
-- `stop_if_human_validation_needed`
-- `max_auto_hops_remaining`
-
-### En `workbench/task_result.md`
-Incluir una sección breve de continuación:
-- `blocking_issue_detected`
-- `human_validation_required`
-- `replan_required`
-- `ready_for_control_auto_continue`
+Máximo de `10` iteraciones automáticas consecutivas.
+Al alcanzar el límite, `control` debe detener el flujo y pedir confirmación o ayuda humana aunque no haya errores aparentes.

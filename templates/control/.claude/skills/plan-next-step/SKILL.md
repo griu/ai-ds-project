@@ -10,4 +10,4 @@ description: Decide el siguiente paso del proyecto a partir del estado actual, d
 5. Evalúa si la tarea está cerrada, parcial o debe rehacerse.
 6. Redacta `control/next_task.md` con una sola tarea, criterios claros y límites.
 7. Actualiza `control/WORKFLOW_STATE.md` antes de pasar el ciclo a `workbench`.
-8. Guarda histórico en `control/history/` cuando corresponda.
+8. Si no se cumple una condición de stop, permite continuar con otra iteración automática.

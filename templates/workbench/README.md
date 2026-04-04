@@ -7,7 +7,8 @@
 ## Qué hace
 - recibe una tarea desde `control/next_task.md`;
 - crea documentación, código y análisis;
-- devuelve un resumen estructurado en `workbench/task_result.md`.
+- devuelve un resumen estructurado en `workbench/task_result.md`;
+- puede ser invocado por `control` como subagente dentro del flujo autónomo de VS Code.
 
 ## Artefactos base
 - `workbench/inputs/`
@@ -24,17 +25,9 @@ Debes respetar siempre:
 - `control/next_task.md`
 - `control/PROJECT_TECHNICAL_REQUIREMENTS.md`
 - `control/WORKFLOW_STATE.md`
-- `control/AUTOMATION_POLICY.md`
 
 La actualización de `control/WORKFLOW_STATE.md` corresponde a `control`, no a `workbench`.
 
 ## Regla de limpieza
-`workbench/task_result.md` debe reflejar solo el resultado de la tarea actual o de la última ejecución cerrada, sin acumular resultados antiguos.
-
-## Reglas operativas importantes
-- El caso debe usar un `.venv/` propio creado desde cero en la raíz del repo.
-- Los notebooks ejecutados deben quedar guardados con outputs visibles.
-- Los gráficos guardados como imágenes deben aparecer también dentro de los notebooks relevantes.
-- En XGBoost no debe imputarse missing por defecto.
-- Las variables categóricas deben entrar de forma nativa como categóricas cuando corresponda.
-- Las variables prohibidas no deben entrar en el modelo.
+`workbench/task_result.md` debe mantenerse limpio.  
+Debe reflejar solo el resultado de la tarea actual o de la última ejecución cerrada, sin acumular resultados antiguos dentro del mismo archivo.
