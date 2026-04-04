@@ -3,82 +3,115 @@
 # AUTOMATION_POLICY.md
 
 ## Propósito
-Definir cómo debe avanzar el flujo de forma autónoma desde el chat de `control` en VS Code usando `workbench` como subagente, sin alterar la traza documental principal del proyecto.
 
-## Principio general
-El flujo puede continuar automáticamente mientras:
-- la siguiente tarea forme parte del plan previsto;
-- no haya replanificación;
-- no haya reapertura de fases previas;
-- no haya validación humana obligatoria;
-- no haya bloqueo técnico;
-- y no se alcance el límite de iteraciones automáticas.
+Este documento define la política estable de automatización del framework.
 
-## Papel de cada componente
-### `control`
-- gobierna el proyecto;
-- redacta o limpia `control/next_task.md`;
-- invoca a `workbench` como subagente cuando procede;
+La automatización principal vive en el **chat de `control` en VS Code**.
+
+`control`:
+- gobierna;
+- decide;
+- invoca a `workbench` como subagente;
 - revisa el resultado;
-- actualiza `control/review_notes.md`;
-- actualiza `control/WORKFLOW_STATE.md`;
-- decide si continúa o se detiene.
+- y decide si continúa o se detiene.
 
-### `workbench`
+`workbench`:
 - ejecuta exactamente la tarea activa;
-- no redefine el plan;
-- actualiza `workbench/task_result.md`;
-- actualiza `workbench/WORKBENCH_STATE.md`;
-- informa si hay bloqueo, replanificación o validación humana obligatoria.
+- actualiza sus artefactos;
+- e informa si el flujo puede continuar o debe detenerse.
 
-### `app`
-- monitoriza estado y traza;
-- ayuda a orientar al usuario;
-- muestra prompts y artefactos;
-- pero **no es el motor principal de ejecución** del bucle autónomo.
+`app`:
+- monitoriza;
+- muestra progreso;
+- ayuda a navegar el flujo;
+- pero no es, por ahora, el motor principal de ejecución.
 
-## Condiciones de continuación automática
-`control` puede seguir invocando a `workbench` si:
-- existe una tarea activa válida y limpia;
-- la tarea siguiente es continuidad natural del plan;
-- no aparece replanificación;
-- no aparece reapertura de una fase previa;
-- no hay contradicción metodológica relevante;
-- `workbench` no reporta bloqueo;
-- y el contador de iteraciones automáticas es menor que `10`.
+---
 
-## Condiciones de parada humana
-El flujo debe detenerse si:
-- aparece una decisión reservada a validación humana;
+## Regla de continuación automática
+
+`control` puede continuar automáticamente con una nueva iteración si se cumplen todas estas condiciones:
+
+- la siguiente tarea forma parte del plan previsto;
+- no hay replanificación;
+- no hay reapertura de fases anteriores;
+- no aparecen tareas nuevas no previstas;
+- no hay bloqueo técnico;
+- no hay validación humana obligatoria;
+- y no se supera el límite de 10 iteraciones automáticas consecutivas.
+
+---
+
+## Límite de seguridad
+
+- máximo de iteraciones automáticas consecutivas: **10**
+- al alcanzar ese límite, `control` debe detenerse y solicitar intervención humana
+
+---
+
+## Condiciones de parada obligatoria
+
+`control` debe detener la automatización si ocurre cualquiera de estas situaciones:
+
 - falta información crítica;
-- se detecta contradicción relevante;
+- aparece una contradicción relevante;
+- `workbench` reporta bloqueo técnico;
 - hay que redefinir una tarea previa;
 - aparece una tarea nueva no prevista;
 - se reabre una fase anterior;
-- `workbench` reporta bloqueo;
-- o se alcanza el límite de `10` iteraciones automáticas consecutivas.
+- se requiere validación humana obligatoria;
+- o se alcanza el límite de 10 iteraciones automáticas consecutivas.
 
-## Decisiones típicamente reservadas a la persona
-- definición final de la muestra;
-- exclusión de casos;
+---
+
+## Validación humana obligatoria
+
+La automatización debe detenerse siempre si aparece una decisión sobre:
+
+- exclusión de casos de la muestra;
+- definición final de muestras;
 - transformación del target continuo;
 - aceptación de variables sensibles o proxy;
 - aprobación final del modelo;
 - aprobación final del YAML definitivo.
 
+---
+
+## Regla de trazabilidad
+
+La automatización no debe cambiar la filosofía de la traza documental.
+
+Se mantienen como artefactos vivos:
+
+- `control/next_task.md`
+- `control/review_notes.md`
+- `control/WORKFLOW_STATE.md`
+- `workbench/task_result.md`
+- `workbench/WORKBENCH_STATE.md`
+
+La automatización debe trabajar sobre ellos, no sustituirlos.
+
+---
+
 ## Regla de limpieza documental
+
 ### `control/next_task.md`
-Debe contener **solo** la tarea activa vigente.
+Debe contener solo la tarea activa vigente.
 
 ### `workbench/task_result.md`
-Debe contener **solo** el resultado de la tarea actual o de la última ejecución cerrada.
+Debe contener solo el resultado de la tarea actual o de la última ejecución cerrada.
 
-La trazabilidad histórica debe vivir en:
-- Git;
-- `history/`;
-- o artefactos específicos,
-pero no como acumulación desordenada dentro de esos dos archivos.
+No deben usarse como logs acumulativos de todo el proyecto.
 
-## Límite de seguridad
-Máximo de `10` iteraciones automáticas consecutivas.
-Al alcanzar el límite, `control` debe detener el flujo y pedir confirmación o ayuda humana aunque no haya errores aparentes.
+---
+
+## Regla sobre Streamlit
+
+La app Streamlit debe tratarse como:
+
+- monitor;
+- cockpit visual;
+- ayuda de seguimiento;
+- guía del estado del flujo;
+
+pero **no** como motor principal de ejecución de iteraciones.

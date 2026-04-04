@@ -1,52 +1,65 @@
-# Streamlit app integration notes
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 
-## Objetivo
-Integrar una app de Streamlit a `templates/app` para que cada caso instanciado tenga su propia copia bajo `app/`.
+# STREAMLIT_APP_INTEGRATION_NOTES.md
+
+## Propósito de la app Streamlit
+
+La app Streamlit forma parte del framework como capa de:
+
+- monitorización;
+- visualización de estados;
+- navegación de artefactos;
+- ayuda para entender el flujo;
+- y soporte operativo de seguimiento.
 
 ## Papel correcto de la app
-La app Streamlit debe actuar como:
-- monitor del estado global y local;
-- cockpit de seguimiento;
-- ayuda visual para prompts, artefactos e histórico.
 
-No debe actuar, por ahora, como motor principal de ejecución autónoma.
+La app debe actuar como:
 
-## Motor principal de la automatización
-La automatización principal vive en **VS Code, desde el chat de `control`**, donde:
-- `control` gobierna el ciclo;
-- invoca a `workbench` como subagente;
-- revisa el resultado;
-- y continúa iterando mientras no aparezca una condición de parada humana.
+- monitor del estado global (`control/WORKFLOW_STATE.md`);
+- monitor del estado local (`workbench/WORKBENCH_STATE.md`);
+- cockpit visual del proyecto;
+- ayuda para identificar el siguiente paso;
+- visor de resultados, notas y documentos;
 
-## Carpeta nueva
-- `templates/app/`
+pero **no** como motor principal de ejecución del bucle entre `control` y `workbench`.
 
-## Caso instanciado
-Cuando se crea un caso, la carpeta resultante debe contener:
+## Orquestación principal
 
-```text
-<CASE_REPO>/
-├─ control/
-├─ workbench/
-└─ app/
-   ├─ app.py
-   ├─ case_config.json
-   ├─ requirements.txt
-   ├─ run_streamlit.sh
-   ├─ README.md
-   └─ lib/repo_state.py
-```
+La orquestación principal vive en el **chat de `control` en VS Code**.
 
-## Título del caso
-Durante `create_case_instance.sh`, se debe escribir:
-- `app/case_config.json`
+Eso significa que:
 
-con como mínimo:
-```json
-{
-  "case_title": "<target_repo_name>",
-  "case_slug": "<case_slug>",
-  "control_dir": "control",
-  "workbench_dir": "workbench"
-}
-```
+- `control` gobierna el flujo;
+- `control` invoca a `workbench` como subagente;
+- `control` revisa el resultado;
+- y `control` continúa o se detiene según las condiciones definidas en:
+  - `control/DEMO_WORKFLOW_STANDARD.md`
+  - `control/AUTOMATION_POLICY.md`
+
+## Qué puede hacer la app
+
+Sí puede:
+- mostrar progreso;
+- mostrar estados;
+- mostrar artefactos;
+- servir de cuadro de mando;
+- orientar sobre qué parte del flujo está activa;
+- apoyar la comprensión del proyecto.
+
+## Qué no debe asumir por defecto
+
+No debe asumir por defecto:
+- que ejecuta automáticamente a `control`;
+- que ejecuta automáticamente a `workbench`;
+- ni que sustituye la conversación principal de orquestación en VS Code.
+
+## Posible evolución futura
+
+En el futuro, la app podría incorporar capacidades de dispatch o soporte a automatización.
+
+Pero ese no es el diseño principal actual del framework.
+
+El diseño principal actual es:
+
+**persona → control (VS Code) → workbench subagente → control → ...**
