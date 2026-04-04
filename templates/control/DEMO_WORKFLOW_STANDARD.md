@@ -67,6 +67,95 @@ Tanto `control` como `workbench` deben respetarlos.
 
 ---
 
+## Estructura esperada del caso
+
+```text
+<CASE_REPO>/
+├─ .git
+├─ README.md
+├─ control.code-workspace
+├─ workbench.code-workspace
+├─ app.code-workspace
+├─ control/
+│  ├─ CLAUDE.md
+│  ├─ DEMO_WORKFLOW_STANDARD.md
+│  ├─ AUTOMATION_POLICY.md
+│  ├─ PROJECT_TECHNICAL_REQUIREMENTS.md
+│  ├─ WORKFLOW_STATE.md
+│  ├─ next_task.md
+│  ├─ review_notes.md
+│  ├─ project_context.md
+│  ├─ jury_and_demo_goals.md
+│  ├─ history/
+│  ├─ .claude/
+│  └─ .github/prompts/
+├─ workbench/
+│  ├─ CLAUDE.md
+│  ├─ WORKBENCH_STATE.md
+│  ├─ task_result.md
+│  ├─ inputs/
+│  ├─ docs/
+│  ├─ src/
+│  ├─ notebooks/
+│  ├─ tests/
+│  ├─ history/
+│  └─ .claude/
+└─ app/
+   ├─ README.md
+   ├─ app.py
+   └─ ...
+```
+
+---
+
+## Procedimiento de creación del caso
+
+### 1. Variables de trabajo
+
+```bash
+AI_DS_PROJECT_ROOT="/ruta/a/ai-ds-project"
+CASE_SLUG="home-credit"
+CASES_PARENT_DIR="$(dirname "$AI_DS_PROJECT_ROOT")"
+CASE_REPO="$CASES_PARENT_DIR/$CASE_SLUG"
+TARGET_REPO_NAME="$CASE_SLUG"
+```
+
+### 2. Reinicio opcional
+
+```bash
+rm -rf "$CASE_REPO"
+```
+
+### 3. Crear la instancia
+
+Como hermano de `ai-ds-project`:
+
+```bash
+bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh"   "$AI_DS_PROJECT_ROOT"   "$CASE_SLUG"
+```
+
+O con ruta padre explícita:
+
+```bash
+bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh"   "$AI_DS_PROJECT_ROOT"   "$CASE_SLUG"   "$CASES_PARENT_DIR"
+```
+
+O con nombre explícito para el repo destino:
+
+```bash
+bash "$AI_DS_PROJECT_ROOT/demo/scripts/create_case_instance.sh"   "$AI_DS_PROJECT_ROOT"   "$CASE_SLUG"   "$CASES_PARENT_DIR"   "$TARGET_REPO_NAME"
+```
+
+### 4. Abrir los workspaces
+
+```bash
+code -n "$CASE_REPO/control.code-workspace"
+code -n "$CASE_REPO/workbench.code-workspace"
+code -n "$CASE_REPO/app.code-workspace"
+```
+
+---
+
 ## Regla de automatización principal
 
 `control` puede continuar iterando automáticamente con `workbench` mientras:
@@ -182,6 +271,10 @@ Los prompts operativos deben limitarse a:
 
 ## Prompt 1 — Bootstrap inicial de control
 
+```markdown
+Ejecuta el prompt 01_bootstrap_project
+```
+
 Este prompt se usa una sola vez al arrancar el caso.
 
 Objetivo:
@@ -192,6 +285,10 @@ Objetivo:
 ---
 
 ## Prompt 2 — Prompt maestro de orquestación autónoma de control
+
+```markdown
+Ejecuta el prompt 02_autonomous_control_orchestration
+```
 
 Este es el prompt principal del sistema.
 
@@ -213,6 +310,10 @@ Este prompt es el mecanismo central de la automatización.
 
 ## Prompt 3 — Revisión humana correctiva de control
 
+```markdown
+Ejecuta el prompt 02_review_task_result
+```
+
 Se usa cuando la persona quiere introducir observaciones humanas sobre un resultado o una decisión ya tomada por el sistema.
 
 Objetivo:
@@ -225,6 +326,10 @@ Objetivo:
 
 ## Prompt 4 — Reapertura desde un estado anterior
 
+```markdown
+Ejecuta el prompt 05_reopen_or_resume_from_state
+```
+
 Se usa cuando se quiere volver explícitamente a un estado o fase anterior del plan.
 
 Objetivo:
@@ -235,6 +340,11 @@ Objetivo:
 ---
 
 ## Prompt 5 — Ejecución manual de fallback para workbench
+
+```markdown
+Ejecuta el prompt 02_review_task_result
+Ejecuta el prompt 03_workbench_manual_execution
+```
 
 Este prompt solo se usa como respaldo.
 
@@ -250,12 +360,12 @@ No es el flujo principal del framework.
 
 ### Inicio
 1. La persona abre `control.code-workspace`
-2. Lanza el prompt bootstrap inicial de `control`
+2. Lanza el prompt bootstrap inicial de `control` : Ejecuta el prompt 01_bootstrap_project
 3. `control` crea la primera `control/next_task.md`
 4. `control` actualiza `control/WORKFLOW_STATE.md`
 
 ### Bucle normal
-5. La persona lanza el prompt maestro de orquestación autónoma de `control`
+5. La persona lanza el prompt maestro de orquestación autónoma de `control`: Ejecuta el prompt 02_autonomous_control_orchestration
 6. `control` invoca a `workbench` como subagente
 7. `workbench` ejecuta y actualiza:
    - `workbench/task_result.md`
